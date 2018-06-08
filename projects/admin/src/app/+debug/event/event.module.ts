@@ -6,7 +6,7 @@ import {
   CommonModule, MatInputModule, MatTableModule, MatSimpleSelectModule, FormModule, MatDynamicAccessorModule, EntityModule, MatConfirmDialogModule
 } from '../../../../../stooges/src/public_api';
 import { HeaderModule } from '../../shared/header/header.module';
-import { MatCardModule, MatProgressSpinnerModule, MatIconModule, MatButtonModule } from '@angular/material';
+import { MatCardModule, MatProgressSpinnerModule, MatIconModule, MatButtonModule, MatMenuModule } from '@angular/material';
 import { PaginationModule } from '../../shared/pagination/pagination.module';
 
 @NgModule({
@@ -25,7 +25,8 @@ import { PaginationModule } from '../../shared/pagination/pagination.module';
     MatDynamicAccessorModule,
     EntityModule,
     MatConfirmDialogModule,
-    MatButtonModule
+    MatButtonModule,
+    MatMenuModule
   ],
   declarations: [
     EventComponent

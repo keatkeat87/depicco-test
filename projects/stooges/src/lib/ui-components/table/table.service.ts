@@ -1,11 +1,8 @@
 import { Injectable } from '@angular/core';
 import { TableCellType, KeyAndTControl } from './types';
-import { EnumMetadata } from '../../decorators/Enum';
-import { valueToDisplay } from '../../common/methods/value-to-display';
-import { DisplayNameMetadata } from '../../decorators/DisplayName';
 import { METADATA_KEY } from '../../decorators/metadata-key';
 import { TControl } from './models/TControl';
-import { EnumTConrol } from './models/EnumTConrol';
+import { generateDisplayNameFromMetadata } from '../..';
  
 @Injectable({
   providedIn : 'root'
@@ -15,8 +12,7 @@ export class TableService {
   constructor() { }
 
   private generateDisplayName(resource: any, key: string, parentDisplayName?: string): string {
-    let displayNameMetadata: DisplayNameMetadata = Reflect.getMetadata(METADATA_KEY.TableDisplayName, resource, key) || Reflect.getMetadata(METADATA_KEY.DisplayName, resource, key);
-    let displayName = displayNameMetadata ? displayNameMetadata.name : valueToDisplay(key, 'spaceFirstUpper');
+    let displayName = generateDisplayNameFromMetadata(resource, 'table', key);
     return parentDisplayName ? parentDisplayName + ' ' + displayName : displayName;
   }
 
@@ -64,12 +60,7 @@ export class TableService {
       return 'Text';
     }
   }
-
-  private createTConrol(resource: any, key: string): TControl {
-    let enumMetadata = Reflect.getMetadata(METADATA_KEY.Enum, resource, key) as EnumMetadata;
-    return (enumMetadata) ? new EnumTConrol({ enumMetadata }) : new TControl();
-  }
-
+ 
   generateTControls(resource: any, parentKey?: string, parentDisplayName?: string): KeyAndTControl[] {
     let keyAndTControls: KeyAndTControl[] = [];
     const keys = Object.keys(resource);
@@ -91,7 +82,7 @@ export class TableService {
         keyAndTControls = [...keyAndTControls, ...this.generateTControls(value, key, displayName)]; // 递归
       }
       else {
-        let tControl = this.createTConrol(resource, key);
+        let tControl = new TControl();
         tControl.sortable = this.sortable(resource, key);
         tControl.displayName = this.generateDisplayName(resource, key, parentDisplayName);
         tControl.cellType = this.selectCellType(resource, key);

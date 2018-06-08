@@ -36,10 +36,10 @@ export class PostComponent extends MatAbstractCPTableComponent<ResourceType> imp
     private postService: PostService,
     confirmService: MatConfirmDialogService,
     stoogesAppComponent: StoogesAppComponent,
-    private tableService: TableService,
+    tableService: TableService,
     @Inject(MAT_CP_TABLE_CONFIG) tableConfig: MatCPTableConfig 
   ) {
-    super(activatedRoute, router, cdr, youtubeLoading, postService, confirmService, stoogesAppComponent, tableConfig);
+    super(activatedRoute, router, cdr, youtubeLoading, postService, confirmService, stoogesAppComponent, tableConfig, tableService);
   }
 
   protected getResourcesStream(queryParams: QueryParams): ResourceStream<ResourceType[]> {

@@ -7,6 +7,7 @@ import { Required, Service, Key, Sort, ImageDecorator, SImage, Unique, UrlTitle,
 export class Event implements Entity {
 
     static entityName = 'Events';
+    static className = 'Event';
 
     constructor(data?: Partial<Event>) {
         Object.assign(this, data);

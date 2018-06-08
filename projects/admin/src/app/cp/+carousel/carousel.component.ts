@@ -36,10 +36,10 @@ export class CarouselComponent extends MatAbstractCPTableComponent<ResourceType>
     private carouselService: CarouselService,
     confirmService: MatConfirmDialogService,
     stoogesAppComponent: StoogesAppComponent,
-    private tableService: TableService,
+    tableService: TableService,
     @Inject(MAT_CP_TABLE_CONFIG) tableConfig: MatCPTableConfig
   ) {
-    super(activatedRoute, router, cdr, youtubeLoading, carouselService, confirmService, stoogesAppComponent, tableConfig);
+    super(activatedRoute, router, cdr, youtubeLoading, carouselService, confirmService, stoogesAppComponent, tableConfig, tableService);
   }
 
   protected getResourcesStream(queryParams: QueryParams): ResourceStream<ResourceType[]> {

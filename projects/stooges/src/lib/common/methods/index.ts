@@ -32,3 +32,4 @@ export * from './to-ng-http-params';
 export * from './create-and-append-script';
 export * from './is-moment-object';
 export * from './has-key-by-path';
+export * from './generate-display-name-from-metadata';

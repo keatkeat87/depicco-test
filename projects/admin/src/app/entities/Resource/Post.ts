@@ -6,6 +6,8 @@ import { Required, ImageDecorator, Ckeditor, Service, Key, UrlTitle, DateDecorat
 export class Post implements Entity {
 
     static entityName = 'Posts';
+    static className = 'Post';
+    
 
     constructor(data?: Partial<Post>) {
         Object.assign(this, data);

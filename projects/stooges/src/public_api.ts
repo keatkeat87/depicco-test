@@ -62,6 +62,7 @@ export * from './lib/common/methods/typeof';
 export * from './lib/common/methods/value-to-display';
 export * from './lib/common/methods/is-moment-object';
 export * from './lib/common/methods/has-key-by-path';
+export * from './lib/common/methods/generate-display-name-from-metadata';
 // common/pipes
 export * from './lib/common/pipes/age.pipe';
 export * from './lib/common/pipes/array-range.pipe';
@@ -310,7 +311,6 @@ export * from './lib/ui-components/material-components/table/abstract-cp-table.c
 export * from './lib/ui-components/material-components/table/cp-table-config';
 export * from './lib/ui-components/material-components/table/table.component';
 export * from './lib/ui-components/material-components/table/table.module';
-export * from './lib/ui-components/material-components/table/OdataTypeTControl';
 export * from './lib/ui-components/material-components/table/types';
 // ui-components/overlay
 export * from './lib/ui-components/overlay/overlay.module';
@@ -324,7 +324,6 @@ export * from './lib/ui-components/table/table.service';
 export * from './lib/ui-components/table/abstract-table.component';
 export * from './lib/ui-components/table/types';
 // ui-components/table/models
-export * from './lib/ui-components/table/models/EnumTConrol';
 export * from './lib/ui-components/table/models/TableSetting';
 export * from './lib/ui-components/table/models/TControl';
 export * from './lib/ui-components/table/models/TGroup';

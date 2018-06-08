@@ -36,10 +36,10 @@ export class NonVirtualRunEventComponent extends MatAbstractCPTableComponent<Res
     private nonVirtualRunEventService: NonVirtualRunEventService,
     confirmService: MatConfirmDialogService,
     stoogesAppComponent: StoogesAppComponent,
-    private tableService: TableService,
+    tableService: TableService,
     @Inject(MAT_CP_TABLE_CONFIG) tableConfig: MatCPTableConfig
   ) {
-    super(activatedRoute, router, cdr, youtubeLoading, nonVirtualRunEventService, confirmService, stoogesAppComponent, tableConfig);
+    super(activatedRoute, router, cdr, youtubeLoading, nonVirtualRunEventService, confirmService, stoogesAppComponent, tableConfig, tableService);
   }
 
   protected getResourcesStream(queryParams: QueryParams): ResourceStream<ResourceType[]> {

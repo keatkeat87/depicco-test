@@ -5,6 +5,12 @@ export type ObjectFix = 'contain' | 'cover';
 export interface QueryParams { [propName: string]: string | null; } // null 表示拿掉
 export type QueryParamsFnValue = QueryParams | (() => QueryParams);
 export type Constructor<T = any> = new (...args: any[]) => T;
+export type EntityConstructor<T = any> = {
+    new(...args: any[]): T;
+    className : string;
+    entityName : string
+}
+
 export interface Entity { Id: number; }
 export interface ResourceStream<T> { data$: Observable<T>; subscription: ISubscription; refreshAsync: (newQueryParamsFnValue?: QueryParamsFnValue) => Promise<void>; }
 export interface Dimension { width: number; height: number; }
@@ -12,8 +18,8 @@ export interface XY { x: number; y: number; }
 export interface CropData { x: number; y: number; width: number; height: number; }
 export interface Dictionary { [prop: string]: any; }
 export interface Metadata {
-    key: string,
-    value: any
+    key: string;
+    value: any;
 }
 export type CompareType = 'eq' | 'gt' | 'ge' | 'lt' | 'le';
 export type CompareWith<T = any> = (a : T, b : T) => boolean;

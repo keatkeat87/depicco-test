@@ -48,6 +48,8 @@ image : Image = null!;
 export class Sample implements Entity {
 
     static entityName = 'Samples';
+    static className = 'Sample';
+    
 
     constructor(data?: Partial<Sample>) {
         Object.assign(this, data);

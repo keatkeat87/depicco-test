@@ -5,6 +5,7 @@ export class TControl {
       Object.assign(this, data);
     }
     displayName: string
-    sortable: boolean | (() => boolean) // 处理继承 resource 的情况下需要动态的 sortable 
+    sortable: boolean // 表示这个 cell 在类型上是否支持 sort
+    blockSort = false; // 我们可以用 condition 阻止 sort, 比如继承的情况下就需要.
     cellType: TableCellType
   }

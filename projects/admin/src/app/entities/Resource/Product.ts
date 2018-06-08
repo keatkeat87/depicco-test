@@ -6,6 +6,8 @@ import { Required, Service, Key, Sort, ImageDecorator, SImage, Unique, UrlTitle,
 export class Product implements Entity {
 
     static entityName = 'Products';
+    static className = 'Product';
+    
 
     constructor(data?: Partial<Product>) {
         Object.assign(this, data);

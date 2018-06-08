@@ -26,6 +26,17 @@
           displayName="Types">
         </s-mat-simple-select>
 
+        <button mat-button
+          [matMenuTriggerFor]="createEventMenu">Create</button>
+        <mat-menu #createEventMenu="matMenu">          
+          <a *ngFor="let entityItem of withoutAbstractEntityItems" 
+            mat-menu-item 
+            [routerLink]="['create-' + entityItem.Class.className]"
+            queryParamsHandling="preserve"
+            color="primary"
+            class="createButton">{{ entityItem.displayName }}</a> 
+        </mat-menu>
+
       </div>
       <div class="overflow-auto">
         <s-mat-table [dataSource]="dataSource"
@@ -35,6 +46,7 @@
           [sortDirection]="sortDirection"
           (sortChange)="sortBy($event)"
           (remove)="remove($event.resource.Id)"
+          [generateEditRouterLink]="generateEditRouterLink"
           [showDrag]="true"
           [cellDraggable]="sort == 'sort' && !updatingSort"
           (cellDragstart)="recordDragStart($event.resource)"

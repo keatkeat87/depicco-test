@@ -7,10 +7,8 @@ import { PatternMetadata } from '../../decorators/Pattern';
 import { MinMetadata } from '../../decorators/Min';
 import { MaxMetadata } from '../../decorators/Max';
 import { RangeMetadata } from '../../decorators/Range';
-import { DisplayNameMetadata } from '../../decorators/DisplayName';
 import { CompareMetadata } from '../../decorators/Compare';
 import { BehaviorSubject } from 'rxjs';
-import { valueToDisplay } from '../../common/methods/value-to-display';
 import { isObject } from '../../common/methods/is-object';
 import { Validator } from '../../form/types';
 import { EGroup } from '../../entity/models/EGroup';
@@ -18,6 +16,7 @@ import { EAbstractControl } from '../../entity/models/EAbstractControl';
 import { EArray } from '../../entity/models/EArray';
 import { EControl } from '../../entity/models/EControl';
 import { ValidatorsService } from '../services/validators.service';
+import { generateDisplayNameFromMetadata } from '../../common/methods/generate-display-name-from-metadata';
 
 
 @Injectable({
@@ -55,8 +54,7 @@ export class FormService {
                 }
             });
 
-            let displayNameMetadata: DisplayNameMetadata = Reflect.getMetadata(METADATA_KEY.FormDisplayName, resource, key) || Reflect.getMetadata(METADATA_KEY.DisplayName, resource, key);
-            let displayName = displayNameMetadata ? displayNameMetadata.name : valueToDisplay(key, 'spaceFirstUpper');
+            let displayName = generateDisplayNameFromMetadata(resource, 'form', key);
             if (parentDisplayName) displayName = parentDisplayName + ' ' + displayName;
 
             let validators: Validator[] = [];

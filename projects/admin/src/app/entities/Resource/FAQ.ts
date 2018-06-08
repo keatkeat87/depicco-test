@@ -6,7 +6,8 @@ import { Required, Service, Key, Sort, LongText, Textarea, Entity } from '../../
 export class FAQ implements Entity {
 
     static entityName = 'FAQs';
-
+    static className = 'FAQ';
+    
     constructor(data?: Partial<FAQ>) {
         Object.assign(this, data);
     }

@@ -1,15 +1,16 @@
-import { fnValue } from '../../../common/methods/fn-value';
 import { Component, OnInit, ChangeDetectionStrategy, Input, TrackByFunction, Output, EventEmitter, AfterContentInit, ContentChildren, QueryList, ViewChild, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { Observable ,  Subscription } from 'rxjs';
 import { SortDirection, MatColumnDef, MatRowDef, MatTable } from '@angular/material';
 import { ImageService } from '../../../common/services/image.service';
-import { Entity } from '../../../types';
+import { Entity, EntityConstructor } from '../../../types';
 import { getByPath } from '../../../common/methods/get-by-path';
 import { SImage } from '../../../models/Image';
 import { KeyAndTControl } from '../../table/types';
-import { MatTableGenerateRowNgClassFn, MatTableEntityItem } from './types';
-import { odataType } from '../../../entity/types';
-import { getClassNameFromOdatTypeResource } from '../../../entity/get-class-name-from-odata-type-resource';
+import { MatTableGenerateRowNgClassFn, MatTableGenerateEditRouterLink } from './types';
+import { METADATA_KEY } from '../../../decorators/metadata-key';
+import { EnumMetadata } from '../../../decorators/Enum';
+import { valueToDisplay } from '../../../common/methods/value-to-display';
+import { generateDisplayNameFromMetadata } from '../../..';
 
 
 @Component({
@@ -100,29 +101,8 @@ export class MatTableComponent implements OnInit, AfterContentInit, OnDestroy {
   generateRowNgClassFn: MatTableGenerateRowNgClassFn<Entity>
  
   @Input()
-  selectedEntityItem : MatTableEntityItem
-
-  onSortChange(sortKey: string) {
-    // 如果有处理继承情况, 要把 namespace 拿掉哦
-    if (this.selectedEntityItem) sortKey = sortKey.split('.').slice(1).join('.');
-    this.sortChangeEmitter.emit(sortKey);
-  }
-
-  generateEditRouterLink(resource: Entity): string[] {
-    let editPath = 'edit';
-    if (this.selectedEntityItem) {
-      let className: string;
-      if (resource[odataType]) {
-        className = getClassNameFromOdatTypeResource(resource).toLowerCase();
-      }
-      else {
-        className = this.selectedEntityItem.class.name.toLowerCase()
-      }
-      editPath += '-' + className;
-    }
-    return [resource.Id.toString(), editPath];
-  }
-
+  generateEditRouterLink : MatTableGenerateEditRouterLink<Entity>
+ 
   internalGenerateRowNgClassFn: MatTableGenerateRowNgClassFn<Entity> = (resource, index) => {
     let result = {};
     if (this.generateRowNgClassFn) result = {
@@ -155,13 +135,27 @@ export class MatTableComponent implements OnInit, AfterContentInit, OnDestroy {
     return resource;
   }
 
-  fnValue = fnValue;
-
   sub = new Subscription();
 
   getBiggestImageSrc(image : SImage) {
     let imageData =  this.imageService.getData(image.$metadata, image.width, image.height, image.src);
     return this.imageService.getBiggestDescription(imageData).src;
+  }
+
+  generateEnumDisplay(resource: Entity, path: string) {
+    let value = getByPath(resource, path);
+    if (!value) return value;
+    let keys = path.split('.');
+    let enumResource = (keys.length == 1) ? resource : getByPath(resource, keys.slice(0, keys.length - 1).join('.'));
+    let enumMetadata = Reflect.getMetadata(METADATA_KEY.Enum, enumResource, path) as EnumMetadata;
+    let item = enumMetadata.items.find(i => i.value == value)!;
+    return item.display || valueToDisplay(item.value);
+  }
+
+  generateOdataTypeDisplay(resource: Entity) {
+    let Class = ((resource as Object).constructor as EntityConstructor);
+    let displayName = generateDisplayNameFromMetadata(Class, 'table');
+    return displayName;
   }
 
   ngOnInit() {

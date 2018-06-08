@@ -6,6 +6,8 @@ import { forwardRef } from '@angular/core';
 export class Testimonial implements Entity {
 
     static entityName = 'Testimonials';
+    static className = 'Testimonial';
+    
 
     constructor(data?: Partial<Testimonial>) {
         Object.assign(this, data);

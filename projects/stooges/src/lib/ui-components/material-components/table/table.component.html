@@ -4,7 +4,7 @@
   [matSortActive]="sort"
   [matSortDirection]="sortDirection"
   [matSortDisableClear]="true"
-  (matSortChange)="onSortChange($event.active)">
+  (matSortChange)="sortChangeEmitter.emit($event.active)">
 
   <ng-content></ng-content>
 
@@ -20,16 +20,18 @@
     </mat-cell>
   </ng-container>
 
-  <ng-container [matColumnDef]="(keyAndTControl.namespace) ? keyAndTControl.namespace + '.' + keyAndTControl.key : keyAndTControl.key"
+  <ng-container [matColumnDef]="(keyAndTControl.className) ? keyAndTControl.className! + '.' + keyAndTControl.key : keyAndTControl.key"
 
     *ngFor="let keyAndTControl of keyAndTControls">
     <mat-header-cell *matHeaderCellDef
       mat-sort-header
-      [disabled]="!fnValue(keyAndTControl.tControl.sortable)"
-      [ngClass]="keyAndTControl.tControl.cellType + 'Column'">{{ keyAndTControl.tControl.displayName }}</mat-header-cell>
+      [disabled]="keyAndTControl.tControl.blockSort || !keyAndTControl.tControl.sortable"
+      [ngClass]="keyAndTControl.tControl.cellType + 'Column'">{{ (keyAndTControl.classDisplayName) ? keyAndTControl.classDisplayName! + ' ' + keyAndTControl.tControl.displayName :
+      keyAndTControl.tControl.displayName }}
+    </mat-header-cell>
     <mat-cell *matCellDef="let resource"
       [ngClass]="keyAndTControl.tControl.cellType + 'Column'">
-      <ng-container *ngIf="getByPath(resource,keyAndTControl.key)">
+      <ng-container *ngIf="getByPath(resource,keyAndTControl.key) != null">
 
         <ng-container [ngSwitch]="keyAndTControl.tControl.cellType">
 
@@ -87,15 +89,15 @@
           </ng-container>
 
           <ng-container *ngSwitchCase="'Enum'">
-            {{ $any(keyAndTControl.tControl).valueToDisplay(getByPath(resource, keyAndTControl.key)) }}
-          </ng-container>
-
-          <ng-container *ngSwitchCase="'OdataType'">
-            {{ $any(keyAndTControl.tControl).generateOdataTypeByResource(resource)  }}
+            {{ generateEnumDisplay(resource, keyAndTControl.key) }}
           </ng-container>
 
         </ng-container>
 
+      </ng-container>
+
+      <ng-container *ngIf="keyAndTControl.tControl.cellType == 'OdataType'">
+        {{ generateOdataTypeDisplay(resource) }}
       </ng-container>
     </mat-cell>
   </ng-container>

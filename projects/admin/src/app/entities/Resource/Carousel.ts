@@ -7,6 +7,7 @@ import { ImageDecorator, Required, SImage, Key, Service, LongText, Sort, Type, E
 export class Carousel implements Entity {
 
     static entityName = 'Carousels';
+    static className = 'Carousel';
 
     constructor(data?: Partial<Carousel>) {
         Object.assign(this, data);

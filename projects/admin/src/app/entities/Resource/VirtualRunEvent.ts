@@ -9,6 +9,7 @@ import { Event } from './Event';
 export class VirtualRunEvent extends Event {
 
     static entityName = 'VirtualRunEvents';
+    static className = 'VirtualRunEvent';    
 
     constructor(data?: Partial<VirtualRunEvent>) {
         super();
