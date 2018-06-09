@@ -1,9 +1,9 @@
 import { ChangeDetectorRef, OnDestroy, TrackByFunction } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { SubscriptionLike as ISubscription, BehaviorSubject, Observable } from 'rxjs';
+import { SubscriptionLike, BehaviorSubject, Observable, Subscription } from 'rxjs';
 
-import { pairwise, distinctUntilChanged, startWith } from 'rxjs/operators';
+import { pairwise, distinctUntilChanged, startWith, map } from 'rxjs/operators';
 import { SortDirection } from '@angular/material';
 import { YoutubeLoadingService } from '../../common/services/youtube-loading.service';
 import { StoogesAppComponent } from '../../stooges-app/stooges-app.component';
@@ -20,8 +20,8 @@ export abstract class AbstractTableComponent<ResourceType extends Entity> implem
     protected activatedRoute: ActivatedRoute,
     protected router: Router,
     protected cdr: ChangeDetectorRef,
-    protected youtubeLoading?: YoutubeLoadingService,
-    protected stoogesAppComponent?: StoogesAppComponent // for 全局 refresh 没有就没有咯
+    protected youtubeLoading: YoutubeLoadingService,
+    protected stoogesAppComponent: StoogesAppComponent
   ) { }
 
   protected resourcesSubject = new BehaviorSubject<ResourceType[]>(undefined!);
@@ -60,19 +60,28 @@ export abstract class AbstractTableComponent<ResourceType extends Entity> implem
     return index;
   }
 
+  subscribeQueryParamMap(keys: string[], runFirstTime = true): void {
+
+  }
+
   protected startup() {
     this.queryParamKeysForAjax = [
       ...this.queryParamKeysForAjax,
       'page', 'sort', 'rowPerPage'
     ];
 
-    this.activatedRoute.queryParamMap.subscribe(queryParamMap => {
-      // page
-      const page = queryParamMap.get('page');
+    this.activatedRoute.queryParamMap.pipe(
+      map(q => q.get('page')),
+      distinctUntilChanged()
+    ).subscribe(page => {
       this.page = (page == null) ? this.setting.page : +page;
+      this.cdr.markForCheck();
+    });
 
-      // sort and desc
-      const sort = queryParamMap.get('sort');
+    this.activatedRoute.queryParamMap.pipe(
+      map(q => q.get('sort')),
+      distinctUntilChanged()
+    ).subscribe(sort => {
       if (sort == null) {
         this.sort = this.setting.sort;
         this.desc = this.setting.desc;
@@ -86,14 +95,17 @@ export abstract class AbstractTableComponent<ResourceType extends Entity> implem
           this.sort = sort;
         }
       }
-
-      // rowPerPage
-      const rowPerPage = queryParamMap.get('rowPerPage');
-      this.rowPerPage.setValue((rowPerPage) ? +rowPerPage : this.setting.rowPerPage);
-
       this.cdr.markForCheck();
     });
 
+    this.activatedRoute.queryParamMap.pipe(
+      map(q => q.get('rowPerPage')),
+      distinctUntilChanged()
+    ).subscribe(rowPerPage => {
+      this.rowPerPage.setValue((rowPerPage) ? +rowPerPage : this.setting.rowPerPage);
+      this.cdr.markForCheck();
+    });
+ 
     // rowPerPage value change
     this.rowPerPage.valueChanges.pipe(
       startWith(this.rowPerPage.value),
@@ -111,14 +123,7 @@ export abstract class AbstractTableComponent<ResourceType extends Entity> implem
       if (nextPage != page) queryParams['page'] = nextPage;
       this.patchQueryParams(queryParams);
     });
-
-    // Global refresh
-    if (this.stoogesAppComponent) {
-      this.subs.push(this.stoogesAppComponent.refreshEmitter.subscribe(async () => {
-        await this.refreshAsync();
-        this.cdr.markForCheck();
-      }));
-    }
+ 
 
     this.activatedRoute.queryParamMap.pipe(pairwise()).subscribe(([prev, curr]) => {
       let needAjax = this.queryParamKeysForAjax.some(key => prev.get(key) !== curr.get(key));
@@ -128,14 +133,20 @@ export abstract class AbstractTableComponent<ResourceType extends Entity> implem
       }
     });
 
+      // Global refresh
+      this.subs.add(this.stoogesAppComponent.refreshEmitter.subscribe(async () => {
+        await this.refreshAsync();
+        this.cdr.markForCheck();
+      }));
+
     this.ajax(); // 第一次一定要 ajax 啦
   }
 
   private refreshAsyncFn: () => Promise<void>;
   async refreshAsync() {
-    this.gettingData = true;
+    this.youtubeLoading.start();
     await this.refreshAsyncFn();
-    this.gettingData = false;
+    this.youtubeLoading.end(); 
   }
 
   protected buildQueryParams(): QueryParams {
@@ -160,13 +171,13 @@ export abstract class AbstractTableComponent<ResourceType extends Entity> implem
     this.refreshAsyncFn = refreshAsync;
     if (this.ajaxSubscription) this.ajaxSubscription.unsubscribe();
     this.ajaxSubscription = subscription;
-    this.gettingData = true;
+    this.youtubeLoading.start();
     let firstLoadDataDone = false;
     data$.subscribe(resources => {
       if (!firstLoadDataDone) {
         // stream 只有第一次是这里触发, 其余是因为其它地方改变数据刷新, 这里会直接获取到资料的, 所以不会有 loading 之类的情况
         firstLoadDataDone = true;
-        this.gettingData = false;
+        this.youtubeLoading.end();
       }
       this.resources = resources;
       this.resourcesSubject.next(resources);
@@ -182,27 +193,12 @@ export abstract class AbstractTableComponent<ResourceType extends Entity> implem
     });
   }
 
-  private _gettingData: boolean;
-  get gettingData() {
-    return this._gettingData;
-  }
-  set gettingData(isGettingData) {
-    this._gettingData = isGettingData;
-    if (this.youtubeLoading) {
-      if (isGettingData) {
-        this.youtubeLoading.start();
-      }
-      else {
-        this.youtubeLoading.end();
-      }
-    }
-  }
-
-  private ajaxSubscription: ISubscription;
-  subs: ISubscription[] = []; // 给外面方便用
+  
+  private ajaxSubscription: SubscriptionLike;
+  subs = new Subscription();
 
   ngOnDestroy() {
-    this.subs.forEach(s => s.unsubscribe());
+    this.subs.unsubscribe();
     if (this.ajaxSubscription) this.ajaxSubscription.unsubscribe();
   }
 

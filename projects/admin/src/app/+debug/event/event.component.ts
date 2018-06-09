@@ -19,6 +19,8 @@ import {
 } from '../../../../../stooges/src/public_api';
 
 import * as entities from '../../entities/Resource';
+import { map, distinctUntilChanged } from 'rxjs/operators';
+import { Subject } from 'rxjs';
  
 type ResourceType = Event | NonVirtualRunEvent | VirtualRunEvent;
 
@@ -50,8 +52,8 @@ export class EventComponent extends MatAbstractCPTableComponent<ResourceType> im
     return resourceService.queryWatch(queryParams);
   }
 
-  async ngOnInit() {
-
+  async ngOnInit() { 
+    
     this.rootEntity = Event;
     this.projectEntities = Object.keys(entities).map(key => entities[key]);
 
@@ -84,3 +86,4 @@ export class EventComponent extends MatAbstractCPTableComponent<ResourceType> im
 
 
 
+ 

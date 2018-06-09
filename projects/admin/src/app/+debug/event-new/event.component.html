@@ -1,0 +1,95 @@
+<div class="componentFrame">
+  <!-- <cp-header name="Events"
+      (refresh)="refreshAsync()"></cp-header> -->
+
+  <!-- <mat-spinner *ngIf="!resources"></mat-spinner> -->
+
+  <s-mat-cp-table 
+    [entity]="entity"
+    [defaultDisplayedColumns]="displayedColumns"
+    [defaultSort]="sort"
+    [defaultDesc]="desc"
+    [rowPerPageComponent]="rowPerpage"
+    [paginationComponent]="pagination"></s-mat-cp-table>
+
+  <!-- <s-mat-cp-input-search></s-mat-cp-input-search> -->
+
+  <!-- <s-mat-cp-select-entities></s-mat-cp-select-entities> -->
+
+  <!-- <s-mat-cp-create></s-mat-cp-create> -->
+
+  <s-mat-cp-row-per-page #rowPerpage></s-mat-cp-row-per-page>
+
+  <s-mat-cp-pagination #pagination></s-mat-cp-pagination>
+
+  <!-- <mat-card class="tableCard mt3" [class.fullHeight]="!resources">
+ 
+    <div *ngIf="resources" 
+      [@fadeIn]>
+      <div class="clearfix topTable">
+        <form class="clearfix">
+          <s-mat-input [control]="search"
+            displayName="Search"
+            class="control"></s-mat-input>
+        </form>
+
+        <s-mat-simple-select [control]="selectedEntityItems"
+          [items]="withoutAbstractEntityItems"
+          [hidePleaseSelect]="true"
+          [getValue]="entityItemSelectGetValue"
+          [getDisplay]="entityItemSelectGetDisplay"
+          [compareWith]="entityItemSelectCompareWith"
+          [multiple]="true"
+          displayName="Types">
+        </s-mat-simple-select>
+
+        <button mat-button
+          [matMenuTriggerFor]="createEventMenu">Create</button>
+        <mat-menu #createEventMenu="matMenu">          
+          <a *ngFor="let entityItem of withoutAbstractEntityItems" 
+            mat-menu-item 
+            [routerLink]="['create-' + entityItem.Class.className]"
+            queryParamsHandling="preserve"
+            color="primary"
+            class="createButton">{{ entityItem.displayName }}</a> 
+        </mat-menu>
+
+      </div>
+      <div class="overflow-auto">
+        <s-mat-table [dataSource]="dataSource"
+          [displayedColumns]="displayedColumns"
+          [keyAndTControls]="keyAndTControls"
+          [sort]="sort"
+          [sortDirection]="sortDirection"
+          (sortChange)="sortBy($event)"
+          (remove)="remove($event.resource.Id)"
+          [generateEditRouterLink]="generateEditRouterLink"
+          [showDrag]="true"
+          [cellDraggable]="sort == 'sort' && !updatingSort"
+          (cellDragstart)="recordDragStart($event.resource)"
+          (cellDragend)="draggingData && !updatingSort && updateSort()"
+          [rowSDragover]="draggingData && !updatingSort"
+          (rowDragenter)="draggingData && !updatingSort && moveSort($event.resource,$event.index)"
+          [draggingData]="draggingData">
+        </s-mat-table>
+      </div>
+      <div class="tableFooterArea mt2">
+        <div class="itemPerPageArea">
+          <span>Items per page</span>
+
+          <s-mat-simple-select [control]="rowPerPage"
+            [items]="[10,25,50,100]"
+            [hidePleaseSelect]="true"
+            displayName="">
+          </s-mat-simple-select>
+        </div>
+
+        <cp-pagination [totalRow]="totalRow"
+          [rowPerPage]="rowPerPage.value"
+          [page]="page"
+          class="inline-block"></cp-pagination>
+      </div>
+    </div> 
+  </mat-card> -->
+</div>
+<router-outlet></router-outlet>

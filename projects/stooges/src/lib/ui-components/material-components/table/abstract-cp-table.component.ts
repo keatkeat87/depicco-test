@@ -187,18 +187,15 @@ export abstract class MatAbstractCPTableComponent<ResourceType extends Entity> e
   // override
   startup() {
 
-    // search 
-    this.queryParamKeysForAjax.push('search');
+    // search  
     this.activatedRoute.queryParamMap.pipe(
-      pairwise(),
-      map(([prev, curr]) => [prev.get('search'), curr.get('search')]),
-      filter(([prev, curr]) => prev != curr),
-      map(([_prev, curr]) => curr),
-      startWith(this.activatedRoute.snapshot.queryParamMap.get('search'))
+      map(q => q.get('search')),
+      distinctUntilChanged()
     ).subscribe(search => {
       this.search.setValue(search || '');
       this.cdr.markForCheck();
     });
+
 
     this.search.valueChanges.pipe(
       debounceTime(500),
@@ -210,8 +207,7 @@ export abstract class MatAbstractCPTableComponent<ResourceType extends Entity> e
       this.patchQueryParams({ search: v });
     });
 
-
-
+ 
     // language  
     this.defaultLanguage = this.tableConfig.defaultLanguage;
     this.supportedLanguage = this.tableConfig.supportedLanguages;
@@ -328,11 +324,8 @@ export abstract class MatAbstractCPTableComponent<ResourceType extends Entity> e
       this.queryParamKeysForAjax.push('entities');
 
       this.activatedRoute.queryParamMap.pipe(
-        pairwise(),
-        map(([prev, curr]) => [prev.get('entities'), curr.get('entities')]),
-        filter(([prev, curr]) => prev != curr),
-        map(([_prev, curr]) => curr),
-        startWith(this.activatedRoute.snapshot.queryParamMap.get('entities'))
+        map(q => q.get('entities')),
+        distinctUntilChanged() 
       ).subscribe(entitiesJson => {
         if (entitiesJson) {
           let entities: string[] = entitiesJson.split(',');
