@@ -1,4 +1,4 @@
-import { RouterCacheService } from './services/router-cache.service';
+import { StoogesAppComponent } from './../../stooges-app/stooges-app.component';
 import { Router } from '@angular/router';
 import { Directive, Input } from '@angular/core';
 import { Location } from '@angular/common';
@@ -13,15 +13,15 @@ export class RouterHistoryBackDirective {
 
   constructor(
     private router: Router,
-    private routerCacheService: RouterCacheService,
-    private location: Location
+    private location: Location,
+    private stoogesAppComponent :StoogesAppComponent
   ) { }
 
   @Input()
   routerLinkCommands : any[];
 
   click() {
-    if (this.routerCacheService.noCache) {
+    if (this.stoogesAppComponent.hasLocationHistory) {
       let routerLinkCommands = this.routerLinkCommands || ['../'];
       this.router.navigate(routerLinkCommands, { replaceUrl: true });
     }

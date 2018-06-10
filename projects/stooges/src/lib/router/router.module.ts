@@ -1,7 +1,6 @@
 import { RouterModule as NgRouterModule } from '@angular/router';
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { RouterOutletComponent } from './s-router-outlet/s-router-outlet.component';
-import { RouterHistoryBackDirective } from './router-history-back.directive';
 import { RouteReuseStrategy as NgRouteReuseStrategy } from '@angular/router';
 import { RouteReuseStrategy } from './services/RouteReuseStrategy';
 
@@ -20,12 +19,10 @@ import { RouteReuseStrategy } from './services/RouteReuseStrategy';
     NgRouterModule
   ],
   exports: [
-    RouterOutletComponent,
-    RouterHistoryBackDirective
+    RouterOutletComponent
   ],
   declarations: [
-    RouterOutletComponent,
-    RouterHistoryBackDirective
+    RouterOutletComponent
   ]
 })
 export class RouterModule {

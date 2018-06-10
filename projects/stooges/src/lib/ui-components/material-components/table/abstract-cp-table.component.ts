@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Injector } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatCPTableConfig } from '../../table/cp-table-config';
+import { CPTableConfig } from '../../table/cp-table-config';
 import { Entity, EntityConstructor } from '../../../types';
 import { AbstractTableComponent } from '../../table/abstract-table.component';
 import { YoutubeLoadingService } from '../../../common/services/youtube-loading.service';
@@ -28,7 +28,7 @@ export abstract class MatAbstractCPTableComponent<ResourceType extends Entity> e
     cdr: ChangeDetectorRef,
     youtubeLoading: YoutubeLoadingService,
     stoogesAppComponent: StoogesAppComponent,
-    tableConfig: MatCPTableConfig,
+    tableConfig: CPTableConfig,
     tableService: TableService,
     injector: Injector,
     protected confirmDialogService: MatConfirmDialogService,

@@ -10,7 +10,7 @@ import { popupAnimation } from '../animations/popup.animation';
 import { YoutubeLoadingService } from '../common/services/youtube-loading.service';
 import { AlertService } from '../common/services/alert.service';
 import { TitleMetaDescriptionService } from '../common/services/title-meta-description.service';
-import { filter } from 'rxjs/operators';
+import { filter, skip, take } from 'rxjs/operators';
 
 @Component({
   selector: 'stooges-app',
@@ -22,7 +22,10 @@ import { filter } from 'rxjs/operators';
 export class StoogesAppComponent implements OnInit {
 
   isShowYoutubeLoading = false;
-  refreshEmitter = new EventEmitter();
+  public refreshEmitter = new EventEmitter();
+  // 检查用户是否移动过, 如果是 replace url 拿无法检查的出来哦, ng 无法识别呢.
+  // 这个可以方便用来做 historyback or ../
+  public hasLocationHistory = false; 
 
   constructor(
     private router: Router,
@@ -34,7 +37,7 @@ export class StoogesAppComponent implements OnInit {
 
   showAlertError = false;
   alertMessage = '';
-
+     
   closeAlert() {
     this.showAlertError = false;
     this.alertService.onAlertClose$.next();
@@ -53,6 +56,14 @@ export class StoogesAppComponent implements OnInit {
       if (e instanceof NavigationEnd || e instanceof NavigationCancel) {
         this.youtubeLoadingService.end();
       }
+    });
+
+    this.router.events.pipe(
+      filter(e => e instanceof NavigationEnd),
+      skip(1),
+      take(1)
+    ).subscribe(_ => {
+      this.hasLocationHistory = true;
     });
 
     // display when alert 

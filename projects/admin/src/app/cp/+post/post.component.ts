@@ -9,7 +9,7 @@ import {
   YoutubeLoadingService,
   QueryParams, 
   ResourceStream,
-  MatCPTableConfig,
+  CPTableConfig,
   MAT_CP_TABLE_CONFIG,
   TableService,
   MatAbstractCPTableComponent,
@@ -35,7 +35,7 @@ export class PostComponent extends MatAbstractCPTableComponent<ResourceType> imp
     youtubeLoading: YoutubeLoadingService,
     stoogesAppComponent: StoogesAppComponent,
     tableService: TableService,
-    @Inject(MAT_CP_TABLE_CONFIG) tableConfig: MatCPTableConfig,
+    @Inject(MAT_CP_TABLE_CONFIG) tableConfig: CPTableConfig,
     injector: Injector,
     confirmService: MatConfirmDialogService,
   ) {

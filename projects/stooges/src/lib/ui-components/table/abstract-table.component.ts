@@ -10,12 +10,11 @@ import { StoogesAppComponent } from '../../stooges-app/stooges-app.component';
 import { QueryParams, ResourceStream, Entity, EntityConstructor, CompareWith } from '../../types';
 import { TableSetting, TableSettingSearch } from './models/TableSetting';
 import { ODataCount, ODataNameSpaceWithoutHash } from '../../entity/types';
-import { MatCPTableConfig } from '../table/cp-table-config';
+import { CPTableConfig } from '../table/cp-table-config';
 import { TableService } from './table.service';
 import { AbstractResourceService } from '../../entity/services/abstract-resource.service';
 import { KeyAndTControl } from './types';
-import { MatTableGenerateRowNgClassFn, EntityItem } from '../table/types';
-import { MatSimpleSelectComponentGetValueOrDisplayFn } from '../material-components/accessors/simple-select/simple-select.component';
+import { TableGenerateRowNgClassFn, TableEntityItem } from '../table/types';
 import { ServiceMetadata } from '../../decorators/Service';
 import { METADATA_KEY } from '../../decorators/metadata-key';
 import { DisplayNameMetadata } from '../../decorators/DisplayName';
@@ -23,11 +22,12 @@ import { ExtendsMetadata } from '../../decorators/Extends';
 import { TControl } from './models/TControl';
 import { isValidDate } from '../../common/methods/is-valid-date';
 import { toODataSpecialCharacter } from '../../common/methods/to-odata-special-character';
+import { SimpleSelectGetValueOrDisplayFn } from '../types';
 
 export abstract class AbstractTableComponent<ResourceType extends Entity> implements OnDestroy {
 
 
-  setting: TableSetting;
+  protected setting: TableSetting;
 
   constructor(
     protected activatedRoute: ActivatedRoute,
@@ -35,7 +35,7 @@ export abstract class AbstractTableComponent<ResourceType extends Entity> implem
     protected cdr: ChangeDetectorRef,
     protected youtubeLoading: YoutubeLoadingService,
     protected stoogesAppComponent: StoogesAppComponent,
-    protected tableConfig: MatCPTableConfig,
+    protected tableConfig: CPTableConfig,
     protected tableService: TableService,
     protected injector: Injector
   ) { }
@@ -58,7 +58,7 @@ export abstract class AbstractTableComponent<ResourceType extends Entity> implem
     return (this.desc) ? 'desc' : 'asc';
   }
 
-  protected queryParamKeysForAjax: string[] = ['page', 'rowPerPage', 'sort', 'search', 'entities'];
+  protected queryParamKeysForAjax: string[] = ['page', 'rowPerPage', 'sort', 'search', 'entities', 'filter'];
 
   protected generateSortKeyOnSortBy(sortkey: string): string {
     let { sort, desc } = this;
@@ -82,7 +82,7 @@ export abstract class AbstractTableComponent<ResourceType extends Entity> implem
   protected mainResourceService: AbstractResourceService<ResourceType>
   displayedColumns: string[]
   keyAndTControls: KeyAndTControl[]
-  generateRowNgClassFn: MatTableGenerateRowNgClassFn<ResourceType>
+  generateRowNgClassFn: TableGenerateRowNgClassFn<ResourceType>
 
   search = new FormControl('');
   private defaultLanguage: string;
@@ -93,16 +93,9 @@ export abstract class AbstractTableComponent<ResourceType extends Entity> implem
   // 比如外面写 'title_en' 但是 language 是 cn, 那么 会变成 search 'title_cn'
   protected searchLinkWithLanguage = true;
   protected displayColumnsLinkWithLanguage = true;
-
-  // override 
-  sortBy(sortKey: string) {
-    if (this.hasExtendsConcept) {
-      let { key } = this.splitColumnKey(sortKey);
-      this.patchQueryParams({ sort: this.generateSortKeyOnSortBy(key) });
-    }
-    else {
-      this.patchQueryParams({ sort: this.generateSortKeyOnSortBy(sortKey) });
-    }
+   
+  sortBy(sortKey: string) { 
+    this.patchQueryParams({ sort: this.generateSortKeyOnSortBy(sortKey) });    
   }
 
   private splitColumnKey(key: string): { className: string | null, key: string } {
@@ -119,33 +112,33 @@ export abstract class AbstractTableComponent<ResourceType extends Entity> implem
   protected hasExtendsConcept = false;
   protected mainEntity: EntityConstructor
   protected projectEntities: EntityConstructor[]
-  private fullEntityItems: EntityItem<ResourceType>[] = [];
-  withoutAbstractEntityItems: EntityItem<ResourceType>[] = [];
+  private fullEntityItems: TableEntityItem<ResourceType>[] = [];
+  withoutAbstractEntityItems: TableEntityItem<ResourceType>[] = [];
   selectedEntityItems = new FormControl([]);
   private isSelectedAllEntityItems() {
-    let selectedEntityItems = this.selectedEntityItems.value as EntityItem<ResourceType>[];
+    let selectedEntityItems = this.selectedEntityItems.value as TableEntityItem<ResourceType>[];
     return selectedEntityItems.length == 0 || selectedEntityItems.length == this.fullEntityItems.length;
   }
-  entityItemSelectGetValue: MatSimpleSelectComponentGetValueOrDisplayFn<EntityItem<ResourceType>> = (item) => {
+  entityItemSelectGetValue: SimpleSelectGetValueOrDisplayFn<TableEntityItem<ResourceType>> = (item) => {
     return item;
   }
-  entityItemSelectGetDisplay: MatSimpleSelectComponentGetValueOrDisplayFn<EntityItem<ResourceType>> = (item) => {
+  entityItemSelectGetDisplay: SimpleSelectGetValueOrDisplayFn<TableEntityItem<ResourceType>> = (item) => {
     return item.displayName;
   }
-  entityItemSelectCompareWith: CompareWith<EntityItem<ResourceType>> = (a, b) => {
+  entityItemSelectCompareWith: CompareWith<TableEntityItem<ResourceType>> = (a, b) => {
     return a.Class === b.Class;
   }
 
   // 通过 selected entity items 向上查找出适合的 parent 来作为 抽象 resourceService, 这样才能满足 orderby
-  protected niceParentEntityItem: EntityItem<ResourceType>
-  protected niceParentAncestorEntityItems: EntityItem<ResourceType>[] = [];
-  protected niceParentDescendantEntityItems: EntityItem<ResourceType>[] = [];
-  private generateNiceParentEntityItem(): EntityItem<ResourceType> {
+  protected niceParentEntityItem: TableEntityItem<ResourceType>
+  protected niceParentAncestorEntityItems: TableEntityItem<ResourceType>[] = [];
+  protected niceParentDescendantEntityItems: TableEntityItem<ResourceType>[] = [];
+  private generateNiceParentEntityItem(): TableEntityItem<ResourceType> {
     if (this.isSelectedAllEntityItems()) {
       return this.fullEntityItems.find(f => f.Class == this.mainEntity)!;
     }
     else {
-      let selectedEntityItems: EntityItem<ResourceType>[] = this.selectedEntityItems.value;
+      let selectedEntityItems: TableEntityItem<ResourceType>[] = this.selectedEntityItems.value;
       // step : 
       // 先把所有人提升至最高 layer 
       // 然后 distinct 
@@ -172,8 +165,8 @@ export abstract class AbstractTableComponent<ResourceType extends Entity> implem
       return selectedEntityItems[0];
     }
   }
-  private getAncestorEntityItems(target: EntityItem<ResourceType>): EntityItem<ResourceType>[] {
-    let ancestors: EntityItem<ResourceType>[] = [];
+  private getAncestorEntityItems(target: TableEntityItem<ResourceType>): TableEntityItem<ResourceType>[] {
+    let ancestors: TableEntityItem<ResourceType>[] = [];
     let temp = target;
     while (temp.parent) {
       temp = temp.parent;
@@ -181,8 +174,8 @@ export abstract class AbstractTableComponent<ResourceType extends Entity> implem
     }
     return ancestors;
   }
-  private getDescendantEntityItems(target: EntityItem<ResourceType>): EntityItem<ResourceType>[] {
-    let descendants: EntityItem<ResourceType>[] = [];
+  private getDescendantEntityItems(target: TableEntityItem<ResourceType>): TableEntityItem<ResourceType>[] {
+    let descendants: TableEntityItem<ResourceType>[] = [];
     let tempEntities = [target];
     while (tempEntities.length) {
       let children = this.fullEntityItems.filter(e => tempEntities.some(te => e.parent == te));
@@ -202,8 +195,7 @@ export abstract class AbstractTableComponent<ResourceType extends Entity> implem
   }
 
   protected startup() {
-
-
+ 
     // search  
     this.activatedRoute.queryParamMap.pipe(
       map(q => q.get('search')),
@@ -267,7 +259,7 @@ export abstract class AbstractTableComponent<ResourceType extends Entity> implem
 
     // Extends concept setup       
     if (this.hasExtendsConcept) {
-      type EntityAndParent = { entity: EntityConstructor, parent: null | EntityItem<ResourceType> };
+      type EntityAndParent = { entity: EntityConstructor, parent: null | TableEntityItem<ResourceType> };
       let tempEntityAndParents: EntityAndParent[] = [{ entity: this.mainEntity, parent: null }];
 
       for (let i = 0; i < Number.MAX_VALUE; i++) {
@@ -279,7 +271,7 @@ export abstract class AbstractTableComponent<ResourceType extends Entity> implem
           let serviceMetadata: ServiceMetadata = Reflect.getMetadata(METADATA_KEY.Service, tempEntity);
           let service = this.injector.get(serviceMetadata.getConstructor());
           let displayNameMetadata: DisplayNameMetadata = Reflect.getMetadata(METADATA_KEY.TableDisplayName, tempEntity) || Reflect.getMetadata(METADATA_KEY.DisplayName, tempEntity);
-          let entityItem: EntityItem<ResourceType> = {
+          let entityItem: TableEntityItem<ResourceType> = {
             Class: tempEntity,
             service: service,
             isAbstract: Reflect.hasOwnMetadata(METADATA_KEY.Abstract, tempEntity),
@@ -368,14 +360,16 @@ export abstract class AbstractTableComponent<ResourceType extends Entity> implem
         });
       });
 
-      this.selectedEntityItems.valueChanges.subscribe((entityItems: EntityItem<ResourceType>[]) => {
+      this.selectedEntityItems.valueChanges.subscribe((entityItems: TableEntityItem<ResourceType>[]) => {
         let params: QueryParams = {
           entities: (entityItems.length == 0) ? null : entityItems.map(e => e.Class.className).join(',')
-        }
+        }    
+
         if (this.sort) {
           // 如果要 sort 的 key's entity 不是 niceParent 或则更上层就不能被 sort.
           let sort = this.splitColumnKey(this.sort);
           if (sort.className) { // 没有 className 的一定可以 sort
+
             let okClassNames = [this.niceParentEntityItem, ...this.niceParentAncestorEntityItems].map(e => e.Class.className);
             if (okClassNames.indexOf(sort.className) == -1) {
               params.sort = null;
@@ -480,14 +474,15 @@ export abstract class AbstractTableComponent<ResourceType extends Entity> implem
       '$skip': ((this.page - 1) * this.rowPerPage.value).toString(),
       '$top': this.rowPerPage.value.toString()
     });
-    if (this.sort) {
-      let sort = this.sort.split('.').join('/'); // convert '.' to '/' for odata (我们都是用 '.' 表示层中层, 不过 odata 却用 '/')
+    if (this.sort) {      
+      let sort = (this.hasExtendsConcept) ? this.splitColumnKey(this.sort).key : this.sort;
+      sort = sort.split('.').join('/'); // convert '.' to '/' for odata (我们都是用 '.' 表示层中层, 不过 odata 却用 '/')
       queryParams['$orderby'] = sort + ((this.desc) ? ' desc' : '');
     }
 
     // filter entityType
     if (this.hasExtendsConcept) {
-      const entityItems = this.selectedEntityItems.value as EntityItem<ResourceType>[];
+      const entityItems = this.selectedEntityItems.value as TableEntityItem<ResourceType>[];
       if (this.isSelectedAllEntityItems() || entityItems.length == 1) {
         // skip 
       }

@@ -5,7 +5,7 @@ import { ImageService } from '../../../common/services/image.service';
 import { Entity, EntityConstructor } from '../../../types';
 import { getByPath } from '../../../common/methods/get-by-path';
 import { SImage } from '../../../models/Image';
-import { KeyAndTControl, MatTableGenerateRowNgClassFn } from '../../table/types';
+import { KeyAndTControl, TableGenerateRowNgClassFn } from '../../table/types';
 import { MatTableGenerateEditRouterLink } from './types';
 import { METADATA_KEY } from '../../../decorators/metadata-key';
 import { EnumMetadata } from '../../../decorators/Enum';
@@ -98,12 +98,12 @@ export class MatTableComponent implements OnInit, AfterContentInit, OnDestroy {
   draggingData: Entity
  
   @Input()
-  generateRowNgClassFn: MatTableGenerateRowNgClassFn<Entity>
+  generateRowNgClassFn: TableGenerateRowNgClassFn<Entity>
  
   @Input()
   generateEditRouterLink : MatTableGenerateEditRouterLink<Entity>
  
-  internalGenerateRowNgClassFn: MatTableGenerateRowNgClassFn<Entity> = (resource, index) => {
+  internalGenerateRowNgClassFn: TableGenerateRowNgClassFn<Entity> = (resource, index) => {
     let result = {};
     if (this.generateRowNgClassFn) result = {
       ...result,

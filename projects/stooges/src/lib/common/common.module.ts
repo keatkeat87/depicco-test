@@ -8,7 +8,7 @@ import { AutoResizeDirective } from './directives/auto-resize.directive';
 import { DeviceOnlyDirective } from './directives/device-only.directive';
 import { DragOverDirective } from './directives/drag-over.directive';
 import { HideDirective } from './directives/hide.directive';
-import { CommonHistoryBackDirective } from './directives/common-history-back.directive';
+import { RouterHistoryBackDirective } from './directives/router-history-back.directive';
 import { ShowDirective } from './directives/show.directive';
 import { ArrayRangePipe } from './pipes/array-range.pipe';
 import { CamelCaseToRegularStringPipe } from './pipes/camel-case-to-regular-string.pipe';
@@ -24,7 +24,7 @@ import { ImageDirective } from './directives/image.directive';
     DeviceOnlyDirective,
     DragOverDirective,
     HideDirective,
-    CommonHistoryBackDirective,
+    RouterHistoryBackDirective,
     ShowDirective,
     ImageDirective,
     AgePipe,
@@ -34,14 +34,14 @@ import { ImageDirective } from './directives/image.directive';
     SafeHtmlPipe,
     SafeStylePipe,
     SafeUrlPipe,
-    YoutubeCodePipe
+    YoutubeCodePipe,
   ],
   declarations: [
     AutoResizeDirective,
     DeviceOnlyDirective,
     DragOverDirective,
     HideDirective,
-    CommonHistoryBackDirective,
+    RouterHistoryBackDirective,
     ShowDirective,
     ImageDirective,
     AgePipe,

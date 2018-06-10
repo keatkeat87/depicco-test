@@ -2,15 +2,15 @@ import { ChangeDetectionStrategy, Component, Input, OnInit, forwardRef } from '@
 import { AbstractAccessorComponent } from '../../../../form/components/abstract-accessor';
 import { InvalidFocus } from '../../../../form/types';
 import { CompareWith } from '../../../../types';
+import { SimpleSelectGetValueOrDisplayFn } from '../../../types';
 
 
 export type MatSimpleSelectComponentItem = any;
-export type MatSimpleSelectComponentGetValueOrDisplayFn<T = MatSimpleSelectComponentItem> = (item: T) => any;
 
-let defaultGetValue: MatSimpleSelectComponentGetValueOrDisplayFn = (item) => {
+let defaultGetValue: SimpleSelectGetValueOrDisplayFn<MatSimpleSelectComponentItem> = (item) => {
   return item;
 };
-let defaultGetDisplay: MatSimpleSelectComponentGetValueOrDisplayFn = defaultGetValue;
+let defaultGetDisplay: SimpleSelectGetValueOrDisplayFn<MatSimpleSelectComponentItem> = defaultGetValue;
 let defaultCompareWith: CompareWith = (o1, o2) => {
   return o1 === o2;
 }
@@ -39,14 +39,14 @@ export class MatSimpleSelectComponent extends AbstractAccessorComponent implemen
   internalGetValue = defaultGetValue;
 
   @Input()
-  set getValue(getValueFn: MatSimpleSelectComponentGetValueOrDisplayFn) {
+  set getValue(getValueFn: SimpleSelectGetValueOrDisplayFn<MatSimpleSelectComponentItem>) {
     this.internalGetValue = getValueFn || defaultGetValue;
   }
 
   internalGetDisplay = defaultGetDisplay;
 
   @Input()
-  set getDisplay(getDisplayFn: MatSimpleSelectComponentGetValueOrDisplayFn) {
+  set getDisplay(getDisplayFn: SimpleSelectGetValueOrDisplayFn<MatSimpleSelectComponentItem>) {
     this.internalGetDisplay = getDisplayFn || defaultGetDisplay;
   }
 

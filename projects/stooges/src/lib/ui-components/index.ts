@@ -6,3 +6,4 @@ export * from './overlay';
 export * from './slider';
 export * from './zoom';
 export * from './table';
+export * from './types';

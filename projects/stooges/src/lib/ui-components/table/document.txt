@@ -6,6 +6,7 @@
 -pagination
 -rowperpage
 -language link with search and displayColumns
+-sync with route query params  
 
 
 一个 cp table 意思是普通 table + 操作
@@ -13,5 +14,35 @@
 -edit
 -remove
 -change sort
+
+
+细节 : 
+
+
+Sync With Route Query Params 
+这些都是 query params search, sort, language, entities, filter, page, rowPerPage
+route change -> accessor ( same value 就不会 setValue，避免死循环 )
+accessor change -> route ( route query subscribe 时做了 distinct until change 阻止死循环 )
+
+
+Extends Concept
+本来最好的情况是让 entity 做多一个 duplicate 的 class 拥有所有的属性. 就好像一个最上层的 table 那样.
+然后全部运行逻辑就按照这个思路走.
+可是由于 entity 不可以 duplicate class 出来, 所以做了一个模拟.
+我们通过最上层的 class 找出所有子顺来做出所有 column. 用 class 做 namespace 防止 duplicate column key 
+然后在 entity 加入一个 entityType 的属性, sql 是 compute column, 这样就可以做 filter by class 了
+最后一个最难的地方是替换 resourceService, 因为 $orderby 不支持 class/columnKey 这种概念，所以我们一定要使用真确的 resourceService 才可以做出 $orderby
+这导致了 resourceService 是动态的, 给予 filter entities 来实现. 
+future : 目前没有支持 $expand and $select 请在外面自己处理 (记得有动态 resourceService, $expand 写 namespace 时是会不一样的)
+
+
+Filter Form
+form filter 没有 build-in 请在外面实现, 使用 filter=json 做 query params 解析.
+
+
+
+
+
+
 
 

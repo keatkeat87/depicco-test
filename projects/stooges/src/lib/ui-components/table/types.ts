@@ -11,18 +11,18 @@ export interface KeyAndTControl {
   tControl: TControl
 }
 
-export interface MatTableGenerateRowNgClassFn<T> {
+export interface TableGenerateRowNgClassFn<T> {
   (resource: T, index: number): {
     [propName: string]: boolean
   };
 }
  
-export type EntityItem<T extends Entity> = {
+export type TableEntityItem<T extends Entity> = {
   Class: EntityConstructor,
   service: AbstractResourceService<T>
   displayName: string | null
   isAbstract: boolean,
   isRoot: boolean,
   layer: number, // 0 开始 
-  parent: null | EntityItem<T>
+  parent: null | TableEntityItem<T>
 }

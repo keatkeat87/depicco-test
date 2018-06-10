@@ -1,7 +1,6 @@
 import { CompareWith } from '../../../../types';
 import { Component, OnInit, ChangeDetectionStrategy, Input, ChangeDetectorRef, Injector } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { MatSimpleSelectComponentGetValueOrDisplayFn } from '../simple-select/simple-select.component';
 import { AbstractResourceService } from '../../../../entity/services/abstract-resource.service';
 import { Entity } from '../../../../types';
 import { valueToDisplay } from '../../../../common/methods/value-to-display';
@@ -16,6 +15,7 @@ import { ServiceMetadata } from '../../../../decorators/Service';
 import { ForeignKeySelectMetadata } from '../../../../decorators/ForeignKeySelect';
 import { ResourcesMetadata } from '../../../../decorators/Resources';
 import { AccessorType } from '../types';
+import { SimpleSelectGetValueOrDisplayFn } from '../../../types';
 
 @Component({
   selector: 's-mat-dynamic-accessor',
@@ -38,8 +38,8 @@ export class MatDynamicAccessorComponent implements OnInit {
 
   accessorType: AccessorType
 
-  simpleSelectGetValue: MatSimpleSelectComponentGetValueOrDisplayFn
-  simpleSelectGetDisplay: MatSimpleSelectComponentGetValueOrDisplayFn
+  simpleSelectGetValue: SimpleSelectGetValueOrDisplayFn
+  simpleSelectGetDisplay: SimpleSelectGetValueOrDisplayFn
   simpleSelectItems: any
   simpleSelectMultiple: boolean
   simpleSelectCompareWith: CompareWith<Entity>

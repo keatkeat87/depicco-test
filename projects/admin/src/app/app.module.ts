@@ -8,7 +8,7 @@ import {
   TITLE_META_DESCRIPTION_CONFIG, TitleMetaDescriptionConfig,
   UploadedPathConfig, UPLOADED_PATH_CONFIG,
   APIServerConfig, API_SERVER_CONFIG,
-  MatErrorStateMatcher, MAT_CP_TABLE_CONFIG, MatCPTableConfig, ENTITY_CONFIG, EntityConfig
+  MatErrorStateMatcher, MAT_CP_TABLE_CONFIG, CPTableConfig, ENTITY_CONFIG, EntityConfig
 } from '../../../stooges/src/public_api';
 
 import { environment } from '../environments/environment';
@@ -36,7 +36,7 @@ import {
     { provide: UPLOADED_PATH_CONFIG, useValue: new UploadedPathConfig({ uploadedFilesPath: environment.uploadedFilesPath }) },
     { provide: API_SERVER_CONFIG, useValue: new APIServerConfig({ path: environment.APIServer }) },
     { provide: ErrorStateMatcher, useClass: MatErrorStateMatcher }, // material error
-    { provide: MAT_CP_TABLE_CONFIG, useValue: new MatCPTableConfig({ defaultLanguage: 'en', supportedLanguages: ['en'] }) },
+    { provide: MAT_CP_TABLE_CONFIG, useValue: new CPTableConfig({ defaultLanguage: 'en', supportedLanguages: ['en'] }) },
     {
       provide: ENTITY_CONFIG,
       useValue: new EntityConfig({

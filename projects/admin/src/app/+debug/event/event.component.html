@@ -10,11 +10,10 @@
     <div *ngIf="resources"
       [@fadeIn]>
       <div class="clearfix topTable">
-        <form class="clearfix">
+        <div class="clearfix">
           <s-mat-input [control]="search"
             displayName="Search"
             class="control"></s-mat-input>
-        </form>
 
         <s-mat-simple-select [control]="selectedEntityItems"
           [items]="withoutAbstractEntityItems"
@@ -23,19 +22,21 @@
           [getDisplay]="entityItemSelectGetDisplay"
           [compareWith]="entityItemSelectCompareWith"
           [multiple]="true"
-          displayName="Types">
+          displayName="Types"
+          class="control">
         </s-mat-simple-select>
 
-        <button mat-button
-          [matMenuTriggerFor]="createEventMenu">Create</button>
+        <button mat-raised-button
+          [matMenuTriggerFor]="createEventMenu"
+          class="createButton"
+          color="primary">Create</button>
         <mat-menu #createEventMenu="matMenu">          
           <a *ngFor="let entityItem of withoutAbstractEntityItems" 
             mat-menu-item 
             [routerLink]="['create-' + entityItem.Class.className]"
-            queryParamsHandling="preserve"
-            color="primary"
-            class="createButton">{{ entityItem.displayName }}</a> 
+            queryParamsHandling="preserve">{{ entityItem.displayName }}</a> 
         </mat-menu>
+      </div>
 
       </div>
       <div class="overflow-auto">

@@ -7,7 +7,7 @@ import {
   fadeInAnimation,
   StoogesAppComponent,
   YoutubeLoadingService,
-  MatCPTableConfig,
+  CPTableConfig,
   MAT_CP_TABLE_CONFIG,
   TableService,
   MatAbstractCPTableComponent,
@@ -33,7 +33,7 @@ export class CarouselComponent extends MatAbstractCPTableComponent<ResourceType>
     youtubeLoading: YoutubeLoadingService,
     stoogesAppComponent: StoogesAppComponent,
     tableService: TableService,
-    @Inject(MAT_CP_TABLE_CONFIG) tableConfig: MatCPTableConfig,
+    @Inject(MAT_CP_TABLE_CONFIG) tableConfig: CPTableConfig,
     injector: Injector,
     confirmService: MatConfirmDialogService,
   ) {

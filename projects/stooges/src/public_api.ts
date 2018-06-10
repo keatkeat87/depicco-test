@@ -24,9 +24,9 @@ export * from './lib/common/directives/auto-resize.directive';
 export * from './lib/common/directives/device-only.directive';
 export * from './lib/common/directives/drag-over.directive';
 export * from './lib/common/directives/hide.directive';
-export * from './lib/common/directives/common-history-back.directive';
 export * from './lib/common/directives/show.directive';
 export * from './lib/common/directives/image.directive';
+export * from './lib/common/directives/router-history-back.directive'; 
 // common/methods
 export * from './lib/common/methods/camel-case-to-regular-string';
 export * from './lib/common/methods/create-and-append-script';
@@ -212,7 +212,6 @@ export * from './lib/payment/paypal/paypal-form/paypal-form.component';
 
 // router
 export * from './lib/router/router.module';
-export * from './lib/router/router-history-back.directive';
 // router/s-router-outlet
 export * from './lib/router/s-router-outlet/s-router-outlet.component';
 // router/s-router-outlet/services
@@ -230,6 +229,8 @@ export * from './lib/stooges-app/stooges-app.module';
 // stooges-app/youtube-loading
 export * from './lib/stooges-app/youtube-loading/youtube-loading.component';
 
+// ui-components
+export * from './lib/ui-components/types';
 // ui-components/abstract-pagination
 export * from './lib/ui-components/abstract-pagination/abstract-pagination.component';
 // ui-components/accessors/ckeditor

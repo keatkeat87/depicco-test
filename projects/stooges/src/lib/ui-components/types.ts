@@ -1,0 +1,1 @@
+export type SimpleSelectGetValueOrDisplayFn<T = any> = (item: T) => any;

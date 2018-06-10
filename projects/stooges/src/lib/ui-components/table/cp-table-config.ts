@@ -2,8 +2,8 @@
  import { InjectionToken } from "@angular/core";
 
 // provide in root
-export class MatCPTableConfig {
-    constructor(data: MatCPTableConfig) {
+export class CPTableConfig {
+    constructor(data: CPTableConfig) {
         Object.assign(this, data);
     }
     // 这里和 LanguageModule 是完全不一样的概念哦
@@ -14,7 +14,7 @@ export class MatCPTableConfig {
     supportedLanguages: string[]
 }
 
-export const MAT_CP_TABLE_CONFIG = new InjectionToken<MatCPTableConfig>('MAT_CP_TABLE_CONFIG');
+export const MAT_CP_TABLE_CONFIG = new InjectionToken<CPTableConfig>('MAT_CP_TABLE_CONFIG');
 
 
 
