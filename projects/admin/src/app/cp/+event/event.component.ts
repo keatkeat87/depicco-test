@@ -1,14 +1,12 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, Inject } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, Inject, Injector } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Event, EventService } from '../../entities/Resource';
+import { Event } from '../../entities/Resource';
 
 import {
   fadeInAnimation,
   StoogesAppComponent,
   YoutubeLoadingService,
-  QueryParams,
-  ResourceStream,
   MatCPTableConfig,
   MAT_CP_TABLE_CONFIG,
   TableService,
@@ -33,23 +31,19 @@ export class EventComponent extends MatAbstractCPTableComponent<ResourceType> im
     router: Router,
     cdr: ChangeDetectorRef,
     youtubeLoading: YoutubeLoadingService,
-    private eventService: EventService,
-    confirmService: MatConfirmDialogService,
     stoogesAppComponent: StoogesAppComponent,
     tableService: TableService,
-    @Inject(MAT_CP_TABLE_CONFIG) tableConfig: MatCPTableConfig
+    @Inject(MAT_CP_TABLE_CONFIG) tableConfig: MatCPTableConfig,
+    injector: Injector,
+    confirmService: MatConfirmDialogService,
   ) {
-    super(activatedRoute, router, cdr, youtubeLoading, eventService, confirmService, stoogesAppComponent, tableConfig, tableService);
+    super(activatedRoute, router, cdr, youtubeLoading, stoogesAppComponent, tableConfig, tableService, injector, confirmService);
   }
 
-  protected getResourcesStream(queryParams: QueryParams): ResourceStream<ResourceType[]> {
-    return this.eventService.queryWatch(queryParams);
-  }
 
   async ngOnInit() {
 
-    let resource = new Event();
-    this.keyAndTControls = this.tableService.generateTControls(resource);
+    this.mainEntity = Event;
     this.displayedColumns = ['Id', 'image', 'title', 'registerDeadline', 'startRunDate', 'endRunDate', 'registerAmount', 'participant'];
     this.setting = new TableSetting({
       rowPerPage: 10,

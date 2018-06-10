@@ -53,7 +53,7 @@ export class MatDynamicAccessorComponent implements OnInit {
       return this.eControl.hasMetadata(key);
     }
 
-    let type = this.eControl.getMetadata(METADATA_KEY.Type);
+    let designType = this.eControl.getMetadata(METADATA_KEY.DesignType);
     let enumMetadata = this.eControl.getMetadata(METADATA_KEY.Enum) as EnumMetadata;
     let foreignKeyMetadata = this.eControl.getMetadata(METADATA_KEY.ForeignKey) as ForeignKeyMetadata;
     let resourcesMetadata = this.eControl.getMetadata(METADATA_KEY.Resources) as ResourcesMetadata;
@@ -133,19 +133,19 @@ export class MatDynamicAccessorComponent implements OnInit {
       this.simpleSelectLoading = false;
       this.cdr.markForCheck();
     }
-    else if (type === Number) {
+    else if (designType === Number) {
       this.accessorType = 'Number';
     }
-    else if (type === String) {
+    else if (designType === String) {
       let urlTitleMetadata = this.eControl.getMetadata(METADATA_KEY.UrlTitle) as UrlTitleMetadata;
       if (urlTitleMetadata) this.urlTitle = urlTitleMetadata.linkTo;
       this.accessorType = 'Text';
     }
-    else if (type === Boolean) {
+    else if (designType === Boolean) {
       this.accessorType = 'Checkbox';
     }
     else {      
-      console.error('no accessor BUG!, type : ', type);
+      console.error('no accessor BUG!, type : ', designType);
       console.log(this.eControl);
     }
   }

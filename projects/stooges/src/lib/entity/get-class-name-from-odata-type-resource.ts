@@ -1,5 +1,5 @@
-import { odataType, odataNameSpaceWithHash } from "./types";
+import { ODataType, ODataNameSpaceWithHash } from "./types";
 
 export function getClassNameFromOdatTypeResource(resource: any): string {
-    return (resource[odataType] as string).replace(odataNameSpaceWithHash, '');
+    return (resource[ODataType] as string).replace(ODataNameSpaceWithHash, '');
 }

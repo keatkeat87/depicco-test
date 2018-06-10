@@ -1,7 +1,7 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, Inject } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, Inject, Injector } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Sample, SampleService } from '../../entities/Resource';
+import { Sample } from '../../entities/Resource';
 
 import { 
   fadeInAnimation,
@@ -39,13 +39,13 @@ export class SampleComponent extends MatAbstractCPTableComponent<ResourceType> i
     router: Router,
     cdr: ChangeDetectorRef,
     youtubeLoading: YoutubeLoadingService,
-    private sampleService: SampleService,
-    confirmService: MatConfirmDialogService,
     stoogesAppComponent: StoogesAppComponent,
     tableService: TableService,
-    @Inject(MAT_CP_TABLE_CONFIG) tableConfig: MatCPTableConfig 
+    @Inject(MAT_CP_TABLE_CONFIG) tableConfig: MatCPTableConfig,
+    injector: Injector,
+    confirmService: MatConfirmDialogService,
   ) {
-    super(activatedRoute, router, cdr, youtubeLoading, sampleService, confirmService, stoogesAppComponent, tableConfig, tableService);
+    super(activatedRoute, router, cdr, youtubeLoading, stoogesAppComponent, tableConfig, tableService, injector, confirmService);
   }
 
   protected getResourcesStream(queryParams: QueryParams): ResourceStream<ResourceType[]> {
@@ -68,7 +68,7 @@ export class SampleComponent extends MatAbstractCPTableComponent<ResourceType> i
     */
     queryParams['$select'] = 'Id,title_en,images,sort,category,SKU';
     queryParams['$expand'] = 'category';
-    return this.sampleService.queryWatch(queryParams);
+    return this.mainResourceService.queryWatch(queryParams);
   }
 
 
@@ -97,8 +97,8 @@ export class SampleComponent extends MatAbstractCPTableComponent<ResourceType> i
       });
     */
 
-    let resource = new Sample();
-    this.keyAndTControls = this.tableService.generateTControls(resource);
+    this.mainEntity = Sample;
+    // this.hasExtendsConcept = true;
     this.displayedColumns = [];
     this.generateRowNgClassFn = (resource) => {
       return {

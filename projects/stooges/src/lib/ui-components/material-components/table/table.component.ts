@@ -5,8 +5,8 @@ import { ImageService } from '../../../common/services/image.service';
 import { Entity, EntityConstructor } from '../../../types';
 import { getByPath } from '../../../common/methods/get-by-path';
 import { SImage } from '../../../models/Image';
-import { KeyAndTControl } from '../../table/types';
-import { MatTableGenerateRowNgClassFn, MatTableGenerateEditRouterLink } from './types';
+import { KeyAndTControl, MatTableGenerateRowNgClassFn } from '../../table/types';
+import { MatTableGenerateEditRouterLink } from './types';
 import { METADATA_KEY } from '../../../decorators/metadata-key';
 import { EnumMetadata } from '../../../decorators/Enum';
 import { valueToDisplay } from '../../../common/methods/value-to-display';
@@ -152,7 +152,7 @@ export class MatTableComponent implements OnInit, AfterContentInit, OnDestroy {
     return item.display || valueToDisplay(item.value);
   }
 
-  generateOdataTypeDisplay(resource: Entity) {
+  generateODataTypeDisplay(resource: Entity) {
     let Class = ((resource as Object).constructor as EntityConstructor);
     let displayName = generateDisplayNameFromMetadata(Class, 'table');
     return displayName;

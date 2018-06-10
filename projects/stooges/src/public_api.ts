@@ -307,10 +307,9 @@ export * from './lib/ui-components/material-components/confirm-dialog/confirm-di
 export * from './lib/ui-components/material-components/confirm-dialog/confirm-dialog.component';
 export * from './lib/ui-components/material-components/confirm-dialog/confirm.service';
 // ui-components/material-components/table
-export * from './lib/ui-components/material-components/table/abstract-cp-table.component';
-export * from './lib/ui-components/material-components/table/cp-table-config';
 export * from './lib/ui-components/material-components/table/table.component';
 export * from './lib/ui-components/material-components/table/table.module';
+export * from './lib/ui-components/material-components/table/abstract-cp-table.component';
 export * from './lib/ui-components/material-components/table/types';
 // ui-components/overlay
 export * from './lib/ui-components/overlay/overlay.module';
@@ -322,6 +321,7 @@ export * from './lib/ui-components/slider/slider.component';
 // ui-components/table
 export * from './lib/ui-components/table/table.service';
 export * from './lib/ui-components/table/abstract-table.component';
+export * from './lib/ui-components/table/cp-table-config';
 export * from './lib/ui-components/table/types';
 // ui-components/table/models
 export * from './lib/ui-components/table/models/TableSetting';

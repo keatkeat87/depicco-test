@@ -14,7 +14,7 @@ import { FileMetadata } from '../../decorators/FileDecorator';
 import { isObject, isMomentObject } from '../../common/methods';
 import { ComplexTypeMetadata } from '../../decorators/ComplexType';
 import { LanguageService } from '../../language/language.service';
-import { odataType } from '../types';
+import { ODataType } from '../types';
 import { getClassNameFromOdatTypeResource } from '../get-class-name-from-odata-type-resource';
 
 
@@ -72,7 +72,7 @@ export class EntityService {
             });
         } else {
             // 看 @odata.type, 替换成派生类
-            if (resource[odataType]) {
+            if (resource[ODataType]) {
                 const entity = getClassNameFromOdatTypeResource(resource);
                 constructor = this.config.entities[entity];
             }
@@ -206,7 +206,7 @@ export class EntityService {
     */
     format(resource: any, constructor: Constructor): any {
         if (resource == null) return null;
-        if (resource[odataType]) {
+        if (resource[ODataType]) {
             const entity = getClassNameFromOdatTypeResource(resource);
             constructor = this.config.entities[entity];
         }

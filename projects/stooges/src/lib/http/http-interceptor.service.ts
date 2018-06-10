@@ -11,6 +11,7 @@ import { Inject, Injectable, LOCALE_ID, isDevMode } from '@angular/core';
 import { Observable, from as fromPromise, throwError as _throw } from 'rxjs';
 import { catchError, map, retryWhen, scan, delay } from 'rxjs/operators';
 import { AlertService } from '../common/services/alert.service';
+import { ODataContext } from '../entity/types';
 
 export type IdentityInterceptFn = (req: HttpRequest<any>) => HttpRequest<any>;
 
@@ -49,9 +50,9 @@ export class HttpInterceptor implements NgHttpInterceptor {
             // delay(200), //这里 delay 会影响触发事件的顺序，尤其是 observe 'events' 的时候, 不过 production 的时候是不可能会 delay 的，所以 development 时注意一下哦.
             map(httpEvent => {
                 if (httpEvent instanceof HttpResponse) {
-                    if (httpEvent.body && typeof (httpEvent.body) === 'object' && httpEvent.body['@odata.context']) {
+                    if (httpEvent.body && typeof (httpEvent.body) === 'object' && httpEvent.body[ODataContext]) {
                         const body = { ...httpEvent.body };
-                        delete body['@odata.context'];
+                        delete body[ODataContext];
                         return httpEvent.clone<Object>({
                             body: body
                         });

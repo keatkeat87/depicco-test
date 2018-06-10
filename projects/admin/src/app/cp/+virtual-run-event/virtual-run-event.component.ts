@@ -1,14 +1,12 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, Inject } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, Inject, Injector } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { VirtualRunEvent, VirtualRunEventService } from '../../entities/Resource';
+import { VirtualRunEvent } from '../../entities/Resource';
 
 import { 
   fadeInAnimation,
   StoogesAppComponent,
   YoutubeLoadingService,
-  QueryParams, 
-  ResourceStream,
   MatCPTableConfig,
   MAT_CP_TABLE_CONFIG,
   TableService,
@@ -33,23 +31,18 @@ export class VirtualRunEventComponent extends MatAbstractCPTableComponent<Resour
     router: Router,
     cdr: ChangeDetectorRef,
     youtubeLoading: YoutubeLoadingService,
-    private virtualRunEventService: VirtualRunEventService,
-    confirmService: MatConfirmDialogService,
     stoogesAppComponent: StoogesAppComponent,
     tableService: TableService,
-    @Inject(MAT_CP_TABLE_CONFIG) tableConfig: MatCPTableConfig 
+    @Inject(MAT_CP_TABLE_CONFIG) tableConfig: MatCPTableConfig,
+    injector: Injector,
+    confirmService: MatConfirmDialogService,
   ) {
-    super(activatedRoute, router, cdr, youtubeLoading, virtualRunEventService, confirmService, stoogesAppComponent, tableConfig, tableService);
-  }
-
-  protected getResourcesStream(queryParams: QueryParams): ResourceStream<ResourceType[]> { 
-    return this.virtualRunEventService.queryWatch(queryParams);
+    super(activatedRoute, router, cdr, youtubeLoading, stoogesAppComponent, tableConfig, tableService, injector, confirmService);
   }
  
   async ngOnInit() {
  
-    let resource = new VirtualRunEvent();
-    this.keyAndTControls = this.tableService.generateTControls(resource);
+    this.mainEntity = VirtualRunEvent;
     this.displayedColumns = ['Id', 'image', 'title', 'registerDeadline', 'startRunDate', 'endRunDate', 'registerAmount', 'participant', 'group'];
     this.setting = new TableSetting({
       rowPerPage: 10,

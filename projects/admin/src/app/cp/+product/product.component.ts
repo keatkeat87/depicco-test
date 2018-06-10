@@ -1,14 +1,12 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, Inject } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, Inject, Injector } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Product, ProductService } from '../../entities/Resource';
+import { Product } from '../../entities/Resource';
 
 import { 
   fadeInAnimation,
   StoogesAppComponent,
   YoutubeLoadingService,
-  QueryParams, 
-  ResourceStream,
   MatCPTableConfig,
   MAT_CP_TABLE_CONFIG,
   TableService,
@@ -33,23 +31,19 @@ export class ProductComponent extends MatAbstractCPTableComponent<ResourceType> 
     router: Router,
     cdr: ChangeDetectorRef,
     youtubeLoading: YoutubeLoadingService,
-    private productService: ProductService,
-    confirmService: MatConfirmDialogService,
     stoogesAppComponent: StoogesAppComponent,
     tableService: TableService,
-    @Inject(MAT_CP_TABLE_CONFIG) tableConfig: MatCPTableConfig 
+    @Inject(MAT_CP_TABLE_CONFIG) tableConfig: MatCPTableConfig,
+    injector: Injector,
+    confirmService: MatConfirmDialogService,
   ) {
-    super(activatedRoute, router, cdr, youtubeLoading, productService, confirmService, stoogesAppComponent, tableConfig, tableService);
+    super(activatedRoute, router, cdr, youtubeLoading, stoogesAppComponent, tableConfig, tableService, injector, confirmService);
   }
 
-  protected getResourcesStream(queryParams: QueryParams): ResourceStream<ResourceType[]> {
-    return this.productService.queryWatch(queryParams);
-  }
-
+ 
   async ngOnInit() {
 
-    let resource = new Product();
-    this.keyAndTControls = this.tableService.generateTControls(resource);
+    this.mainEntity = Product;
     this.displayedColumns = ['images','title','amount'];  
     this.setting = new TableSetting({
       rowPerPage: 10,

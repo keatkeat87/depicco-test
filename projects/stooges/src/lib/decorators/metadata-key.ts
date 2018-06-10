@@ -47,8 +47,9 @@ export const METADATA_KEY = {
     // 无家可归
     Sort: 'Sort',
     Service: 'Service',
+    Type: 'Type',
 
-    Type: 'design:type',
+    DesignType: 'design:type',
     Returntype: 'design:returntype',
     Paramtypes: 'design:paramtypes'
 }

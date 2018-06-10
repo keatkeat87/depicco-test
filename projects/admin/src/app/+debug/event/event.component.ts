@@ -1,27 +1,22 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, Inject, Injector } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Event, EventService, NonVirtualRunEvent, VirtualRunEvent } from '../../entities/Resource';
+import { Event, NonVirtualRunEvent, VirtualRunEvent } from '../../entities/Resource';
 
 import {
   fadeInAnimation,
   StoogesAppComponent,
   YoutubeLoadingService,
-  QueryParams,
-  ResourceStream,
   MatCPTableConfig,
   MAT_CP_TABLE_CONFIG,
   TableService,
   MatAbstractCPTableComponent,
   MatConfirmDialogService,
-  TableSetting,
-  odataType,
+  TableSetting
 } from '../../../../../stooges/src/public_api';
 
 import * as entities from '../../entities/Resource';
-import { map, distinctUntilChanged } from 'rxjs/operators';
-import { Subject } from 'rxjs';
- 
+
 type ResourceType = Event | NonVirtualRunEvent | VirtualRunEvent;
 
 @Component({
@@ -37,28 +32,23 @@ export class EventComponent extends MatAbstractCPTableComponent<ResourceType> im
     router: Router,
     cdr: ChangeDetectorRef,
     youtubeLoading: YoutubeLoadingService,
-    eventService: EventService,
-    confirmService: MatConfirmDialogService,
     stoogesAppComponent: StoogesAppComponent,
     tableService: TableService,
     @Inject(MAT_CP_TABLE_CONFIG) tableConfig: MatCPTableConfig,
-    injector: Injector
+    injector: Injector,
+    confirmService: MatConfirmDialogService
   ) {
-    super(activatedRoute, router, cdr, youtubeLoading, eventService, confirmService, stoogesAppComponent, tableConfig, tableService, injector);
+    super(activatedRoute, router, cdr, youtubeLoading, stoogesAppComponent, tableConfig, tableService, injector, confirmService);
   }
 
-  protected getResourcesStream(queryParams: QueryParams): ResourceStream<ResourceType[]> {
-    let resourceService = this.getNiceParentEntityItemBySelectedEntityItems().service;
-    return resourceService.queryWatch(queryParams);
-  }
-
-  async ngOnInit() { 
-    
-    this.rootEntity = Event;
+  async ngOnInit() {
+ 
+    this.mainEntity = Event;
+    this.hasExtendsConcept = true;
     this.projectEntities = Object.keys(entities).map(key => entities[key]);
 
     this.displayedColumns = [
-      odataType, 'image', 'title', 'registerDeadline', 'startRunDate', 'endRunDate', 'registerAmount', 'participant', 
+      'entityType', 'image', 'title', 'registerDeadline', 'startRunDate', 'endRunDate', 'registerAmount', 'participant',
       'NonVirtualRunEvent.location',
       'VirtualRunEvent.group'
     ];
@@ -73,10 +63,6 @@ export class EventComponent extends MatAbstractCPTableComponent<ResourceType> im
       }
     });
 
-    // let resource = new Event();
-    // this.keyAndTControls = this.tableService.generateTControls(resource);
- 
-
     this.startup();
   }
 
@@ -86,4 +72,3 @@ export class EventComponent extends MatAbstractCPTableComponent<ResourceType> im
 
 
 
- 

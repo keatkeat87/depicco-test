@@ -6,6 +6,7 @@ import { HttpWatcher } from '../../http/http-watcher.service';
 import { EntityService } from './entity.service';
 import { Entity, QueryParams, QueryParamsFnValue, ResourceStream, Constructor } from '../../types';
 import { toNgHttpParams } from '../../common/methods/to-ng-http-params';
+import { ODataCount } from '..';
  
 export abstract class AbstractResourceService<T extends Entity> {
 
@@ -28,8 +29,8 @@ export abstract class AbstractResourceService<T extends Entity> {
     protected mapMethodOfQuery = (data: Object): T[] => {
         const resources = data['value'];
         const result = this.entityService.parse(resources, this.entity);
-        if (data['@odata.count'] != null) {
-            result['@odata.count'] = data['@odata.count'];
+        if (data[ODataCount] != null) {
+            result[ODataCount] = data[ODataCount];
         }
         return result;
     }

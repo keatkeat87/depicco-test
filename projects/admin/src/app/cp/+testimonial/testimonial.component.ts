@@ -1,14 +1,12 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, Inject } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, Inject, Injector } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Testimonial, TestimonialService } from '../../entities/Resource';
+import { Testimonial } from '../../entities/Resource';
 
 import { 
   fadeInAnimation,
   StoogesAppComponent,
   YoutubeLoadingService,
-  QueryParams, 
-  ResourceStream,
   MatCPTableConfig,
   MAT_CP_TABLE_CONFIG,
   TableService,
@@ -33,23 +31,20 @@ export class TestimonialComponent extends MatAbstractCPTableComponent<ResourceTy
     router: Router,
     cdr: ChangeDetectorRef,
     youtubeLoading: YoutubeLoadingService,
-    private testimonialService: TestimonialService,
-    confirmService: MatConfirmDialogService,
     stoogesAppComponent: StoogesAppComponent,
     tableService: TableService,
-    @Inject(MAT_CP_TABLE_CONFIG) tableConfig: MatCPTableConfig 
+    @Inject(MAT_CP_TABLE_CONFIG) tableConfig: MatCPTableConfig,
+    injector: Injector,
+    confirmService: MatConfirmDialogService,
   ) {
-    super(activatedRoute, router, cdr, youtubeLoading, testimonialService, confirmService, stoogesAppComponent, tableConfig, tableService);
+    super(activatedRoute, router, cdr, youtubeLoading, stoogesAppComponent, tableConfig, tableService, injector, confirmService);
   }
 
-  protected getResourcesStream(queryParams: QueryParams): ResourceStream<ResourceType[]> {    
-    return this.testimonialService.queryWatch(queryParams);
-  } 
+ 
 
   async ngOnInit() {
 
-    let resource = new Testimonial();
-    this.keyAndTControls = this.tableService.generateTControls(resource);
+    this.mainEntity = Testimonial;
     this.displayedColumns = ['avatar','name','designation'];
  
     this.setting = new TableSetting({

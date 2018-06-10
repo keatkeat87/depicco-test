@@ -1,6 +1,6 @@
 import { RouterCacheService } from './services/router-cache.service';
 import { Router } from '@angular/router';
-import { Directive } from '@angular/core';
+import { Directive, Input } from '@angular/core';
 import { Location } from '@angular/common';
 
 @Directive({
@@ -17,9 +17,13 @@ export class RouterHistoryBackDirective {
     private location: Location
   ) { }
 
+  @Input()
+  routerLinkCommands : any[];
+
   click() {
     if (this.routerCacheService.noCache) {
-      this.router.navigate(['../'], { replaceUrl: true });
+      let routerLinkCommands = this.routerLinkCommands || ['../'];
+      this.router.navigate(routerLinkCommands, { replaceUrl: true });
     }
     else {
       this.location.back();

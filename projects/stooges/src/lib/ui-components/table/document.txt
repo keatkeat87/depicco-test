@@ -1,0 +1,17 @@
+一个 table 基本涵盖了 
+-resource Entity
+-exntends concept
+-search
+-sort
+-pagination
+-rowperpage
+-language link with search and displayColumns
+
+
+一个 cp table 意思是普通 table + 操作
+-create
+-edit
+-remove
+-change sort
+
+

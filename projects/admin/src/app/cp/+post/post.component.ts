@@ -1,7 +1,7 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, Inject } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, Inject, Injector } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Post, PostService } from '../../entities/Resource';
+import { Post } from '../../entities/Resource';
 
 import { 
   fadeInAnimation,
@@ -33,13 +33,13 @@ export class PostComponent extends MatAbstractCPTableComponent<ResourceType> imp
     router: Router,
     cdr: ChangeDetectorRef,
     youtubeLoading: YoutubeLoadingService,
-    private postService: PostService,
-    confirmService: MatConfirmDialogService,
     stoogesAppComponent: StoogesAppComponent,
     tableService: TableService,
-    @Inject(MAT_CP_TABLE_CONFIG) tableConfig: MatCPTableConfig 
+    @Inject(MAT_CP_TABLE_CONFIG) tableConfig: MatCPTableConfig,
+    injector: Injector,
+    confirmService: MatConfirmDialogService,
   ) {
-    super(activatedRoute, router, cdr, youtubeLoading, postService, confirmService, stoogesAppComponent, tableConfig, tableService);
+    super(activatedRoute, router, cdr, youtubeLoading, stoogesAppComponent, tableConfig, tableService, injector, confirmService);
   }
 
   protected getResourcesStream(queryParams: QueryParams): ResourceStream<ResourceType[]> {
@@ -47,12 +47,11 @@ export class PostComponent extends MatAbstractCPTableComponent<ResourceType> imp
       const desc = ((this.desc) ? ' desc' : '');
       queryParams['$orderby'] = `publishedDate${desc},Id${desc}`;
     } 
-    return this.postService.queryWatch(queryParams);
+    return this.mainResourceService.queryWatch(queryParams);
   } 
   async ngOnInit() { 
 
-    let resource = new Post();
-    this.keyAndTControls = this.tableService.generateTControls(resource);
+    this.mainEntity = Post;
     this.displayedColumns = ['image','title','publishedDate','author'];
 
     this.setting = new TableSetting({

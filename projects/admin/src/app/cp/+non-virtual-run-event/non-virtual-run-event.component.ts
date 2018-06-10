@@ -1,14 +1,12 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, Inject } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, Inject, Injector } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { NonVirtualRunEvent, NonVirtualRunEventService } from '../../entities/Resource';
+import { NonVirtualRunEvent } from '../../entities/Resource';
 
 import {
   fadeInAnimation,
   StoogesAppComponent,
   YoutubeLoadingService,
-  QueryParams,
-  ResourceStream,
   MatCPTableConfig,
   MAT_CP_TABLE_CONFIG,
   TableService,
@@ -33,23 +31,19 @@ export class NonVirtualRunEventComponent extends MatAbstractCPTableComponent<Res
     router: Router,
     cdr: ChangeDetectorRef,
     youtubeLoading: YoutubeLoadingService,
-    private nonVirtualRunEventService: NonVirtualRunEventService,
-    confirmService: MatConfirmDialogService,
     stoogesAppComponent: StoogesAppComponent,
     tableService: TableService,
-    @Inject(MAT_CP_TABLE_CONFIG) tableConfig: MatCPTableConfig
+    @Inject(MAT_CP_TABLE_CONFIG) tableConfig: MatCPTableConfig,
+    injector: Injector,
+    confirmService: MatConfirmDialogService,
   ) {
-    super(activatedRoute, router, cdr, youtubeLoading, nonVirtualRunEventService, confirmService, stoogesAppComponent, tableConfig, tableService);
+    super(activatedRoute, router, cdr, youtubeLoading, stoogesAppComponent, tableConfig, tableService, injector, confirmService);
   }
 
-  protected getResourcesStream(queryParams: QueryParams): ResourceStream<ResourceType[]> {
-    return this.nonVirtualRunEventService.queryWatch(queryParams);
-  }
-
+  
   async ngOnInit() {
 
-    let resource = new NonVirtualRunEvent();
-    this.keyAndTControls = this.tableService.generateTControls(resource);
+    this.mainEntity = NonVirtualRunEvent;
     this.displayedColumns = ['Id', 'image', 'title', 'registerDeadline', 'startRunDate', 
     'endRunDate', 'registerAmount', 'participant', 'location', 'startRunTime', 'endRunTime'];
 

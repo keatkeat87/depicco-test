@@ -1,14 +1,12 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, Inject } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, Inject, Injector } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Carousel, CarouselService } from '../../entities/Resource';
+import { Carousel } from '../../entities/Resource';
 
 import {
   fadeInAnimation,
   StoogesAppComponent,
   YoutubeLoadingService,
-  QueryParams,
-  ResourceStream,
   MatCPTableConfig,
   MAT_CP_TABLE_CONFIG,
   TableService,
@@ -33,23 +31,18 @@ export class CarouselComponent extends MatAbstractCPTableComponent<ResourceType>
     router: Router,
     cdr: ChangeDetectorRef,
     youtubeLoading: YoutubeLoadingService,
-    private carouselService: CarouselService,
-    confirmService: MatConfirmDialogService,
     stoogesAppComponent: StoogesAppComponent,
     tableService: TableService,
-    @Inject(MAT_CP_TABLE_CONFIG) tableConfig: MatCPTableConfig
+    @Inject(MAT_CP_TABLE_CONFIG) tableConfig: MatCPTableConfig,
+    injector: Injector,
+    confirmService: MatConfirmDialogService,
   ) {
-    super(activatedRoute, router, cdr, youtubeLoading, carouselService, confirmService, stoogesAppComponent, tableConfig, tableService);
-  }
-
-  protected getResourcesStream(queryParams: QueryParams): ResourceStream<ResourceType[]> {
-    return this.carouselService.queryWatch(queryParams);
+    super(activatedRoute, router, cdr, youtubeLoading, stoogesAppComponent, tableConfig, tableService, injector, confirmService);
   }
 
   async ngOnInit() {
 
-    let resource = new Carousel();
-    this.keyAndTControls = this.tableService.generateTControls(resource);
+    this.mainEntity = Carousel;
     this.displayedColumns = ['image_pc', 'title1', 'title2', 'description', 'linkText'];
 
     this.setting = new TableSetting({

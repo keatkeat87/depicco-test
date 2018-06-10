@@ -1,14 +1,12 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, Inject } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, Inject, Injector } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { FAQ, FAQService } from '../../entities/Resource';
+import { FAQ } from '../../entities/Resource';
 
 import {
   fadeInAnimation,
   StoogesAppComponent,
   YoutubeLoadingService,
-  QueryParams,
-  ResourceStream,
   MatCPTableConfig,
   MAT_CP_TABLE_CONFIG,
   TableService,
@@ -33,22 +31,19 @@ export class FAQComponent extends MatAbstractCPTableComponent<ResourceType> impl
     router: Router,
     cdr: ChangeDetectorRef,
     youtubeLoading: YoutubeLoadingService,
-    private faqService: FAQService,
-    confirmService: MatConfirmDialogService,
     stoogesAppComponent: StoogesAppComponent,
     tableService: TableService,
-    @Inject(MAT_CP_TABLE_CONFIG) tableConfig: MatCPTableConfig
+    @Inject(MAT_CP_TABLE_CONFIG) tableConfig: MatCPTableConfig,
+    injector: Injector,
+    confirmService: MatConfirmDialogService,
   ) {
-    super(activatedRoute, router, cdr, youtubeLoading, faqService, confirmService, stoogesAppComponent, tableConfig, tableService);
+    super(activatedRoute, router, cdr, youtubeLoading, stoogesAppComponent, tableConfig, tableService, injector, confirmService);
   }
 
-  protected getResourcesStream(queryParams: QueryParams): ResourceStream<ResourceType[]> {
-    return this.faqService.queryWatch(queryParams);
-  }
+ 
   async ngOnInit() {
 
-    let resource = new FAQ();
-    this.keyAndTControls = this.tableService.generateTControls(resource);
+    this.mainEntity = FAQ;
     this.displayedColumns = ['question', 'answer'];
 
     this.setting = new TableSetting({

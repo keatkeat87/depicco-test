@@ -1,3 +1,5 @@
-export const odataType = '@odata.type';
-export const odataNameSpaceWithHash = '#Project.Entity.';
-export const odataNameSpaceWithoutHash = 'Project.Entity.';
+export const ODataType = '@odata.type';
+export const ODataCount = '@odata.count'
+export const ODataContext = '@odata.context'
+export const ODataNameSpaceWithHash = '#Project.Entity.';
+export const ODataNameSpaceWithoutHash = 'Project.Entity.';

@@ -1,4 +1,4 @@
-export function toOdataSpecialCharacter(value: string) : string {
+export function toODataSpecialCharacter(value: string) : string {
     value = value.replace(/'/g, "''");
     value = value.replace(/%/g, "%25");
     value = value.replace(/\+/g, "%2B");

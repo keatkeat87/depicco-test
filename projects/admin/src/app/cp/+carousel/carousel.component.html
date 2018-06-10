@@ -30,6 +30,7 @@
                     [sortDirection]="sortDirection"
                     (sortChange)="sortBy($event)"
                     (remove)="remove($event.resource.Id)"
+                    [generateEditRouterLink]="generateEditRouterLink"
                     [showDrag]="true"                   
                     [cellDraggable]="sort == 'sort' && !updatingSort"
                     (cellDragstart)="recordDragStart($event.resource)"
