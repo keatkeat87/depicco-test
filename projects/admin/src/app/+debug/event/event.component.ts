@@ -17,7 +17,7 @@ import {
 
 import * as entities from '../../entities/Resource';
 
-type ResourceType = Event | NonVirtualRunEvent | VirtualRunEvent;
+type ResourceType = Event | VirtualRunEvent | NonVirtualRunEvent;
 
 @Component({
   templateUrl: './event.component.html',

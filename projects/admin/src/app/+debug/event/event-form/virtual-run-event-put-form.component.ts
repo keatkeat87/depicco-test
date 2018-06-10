@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { NonVirtualRunEventService, NonVirtualRunEvent } from '../../../entities/Resource';
-import { NonVirtualRunEventComponent } from '../non-virtual-run-event.component';
+import { VirtualRunEventService, VirtualRunEvent } from '../../../entities/Resource';
 import { AbstractSimplePutFormComponent } from '../../simple-form/abstract-simple-put-form.component';
 import { FormService, fadeInAnimation } from '../../../../../../stooges/src/public_api';
+import { EventComponent } from '../event.component';
 
 @Component({
   templateUrl: '../../simple-form/simple-form.component.html',
@@ -12,24 +12,24 @@ import { FormService, fadeInAnimation } from '../../../../../../stooges/src/publ
   changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [fadeInAnimation]
 })
-export class NonVirtualRunEventPutFormComponent extends AbstractSimplePutFormComponent<NonVirtualRunEvent> implements OnInit {
+export class VirtualRunEventPutFormComponent extends AbstractSimplePutFormComponent<VirtualRunEvent> implements OnInit {
 
   constructor(
     cdr: ChangeDetectorRef,
-    nonVirtualRunEventService: NonVirtualRunEventService,
+    virtualRunEventService: VirtualRunEventService,
     activatedRoute: ActivatedRoute,
     router: Router,
     edmFormService: FormService,
-    nonVirtualRunEventComponent: NonVirtualRunEventComponent
+    eventComponent: EventComponent
   ) {
-    super(cdr, nonVirtualRunEventService, activatedRoute, router, edmFormService, nonVirtualRunEventComponent);
+    super(cdr, virtualRunEventService, activatedRoute, router, edmFormService, eventComponent as any);
   }
 
   async ngOnInit() {
     this.displayKeys = [
       'image', 'title', 'urlTitle', 'registerDeadline', 'startRunDate', 
       'endRunDate', 'registerAmount', 'participant', 'summary', 'description',
-      'googleFormLink', 'location', 'startRunTime', 'endRunTime'
+      'googleFormLink', 'group'
     ];
     super.ngOnInit();
   }

@@ -2,9 +2,9 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { VirtualRunEventService, VirtualRunEvent } from '../../../entities/Resource';
-import { VirtualRunEventComponent } from '../virtual-run-event.component';
 import { AbstractSimplePutFormComponent } from '../../simple-form/abstract-simple-put-form.component';
 import { FormService, fadeInAnimation } from '../../../../../../stooges/src/public_api';
+import { EventComponent } from '../event.component';
 
 @Component({
   templateUrl: '../../simple-form/simple-form.component.html',
@@ -20,9 +20,9 @@ export class VirtualRunEventPutFormComponent extends AbstractSimplePutFormCompon
     activatedRoute: ActivatedRoute,
     router: Router,
     edmFormService: FormService,
-    virtualRunEventComponent: VirtualRunEventComponent
+    eventComponent: EventComponent
   ) {
-    super(cdr, virtualRunEventService, activatedRoute, router, edmFormService, virtualRunEventComponent);
+    super(cdr, virtualRunEventService, activatedRoute, router, edmFormService, eventComponent as any);
   }
 
   async ngOnInit() {

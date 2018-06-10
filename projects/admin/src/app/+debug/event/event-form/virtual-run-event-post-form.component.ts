@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 
-import { NonVirtualRunEvent, NonVirtualRunEventService } from '../../../entities/Resource';
-import { AbstractSimplePostFormComponent } from '../../simple-form/abstract-simple-post-form.component';
+import { VirtualRunEvent, VirtualRunEventService } from '../../../entities/Resource';
 
 import { fadeInAnimation, FormService } from '../../../../../../stooges/src/public_api';
+import { AbstractSimplePostFormComponent } from '../../simple-form/abstract-simple-post-form.component';
 
 @Component({
   templateUrl: '../../simple-form/simple-form.component.html',
@@ -11,23 +11,23 @@ import { fadeInAnimation, FormService } from '../../../../../../stooges/src/publ
   changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [fadeInAnimation]
 })
-export class NonVirtualRunEventPostFormComponent extends AbstractSimplePostFormComponent<NonVirtualRunEvent> implements OnInit {
+export class VirtualRunEventPostFormComponent extends AbstractSimplePostFormComponent<VirtualRunEvent> implements OnInit {
 
   constructor(
     cdr: ChangeDetectorRef,
-    nonVirtualRunEventService: NonVirtualRunEventService,
+    virtualRunEventService: VirtualRunEventService,
     edmFormService: FormService
   ) {
-    super(cdr, nonVirtualRunEventService, edmFormService);
+    super(cdr, virtualRunEventService, edmFormService);
   }
 
   ngOnInit() {
     this.displayKeys = [
       'image', 'title', 'urlTitle', 'registerDeadline', 'startRunDate', 
       'endRunDate', 'registerAmount', 'participant', 'summary', 'description',
-      'googleFormLink', 'location', 'startRunTime', 'endRunTime'
+      'googleFormLink', 'group'
     ];
-    this.resourceConstructor = NonVirtualRunEvent;
+    this.resourceConstructor = VirtualRunEvent;
     super.ngOnInit();
   }
 }

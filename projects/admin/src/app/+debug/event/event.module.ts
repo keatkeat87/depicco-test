@@ -8,6 +8,10 @@ import {
 import { HeaderModule } from '../../shared/header/header.module';
 import { MatCardModule, MatProgressSpinnerModule, MatIconModule, MatButtonModule, MatMenuModule } from '@angular/material';
 import { PaginationModule } from '../../shared/pagination/pagination.module';
+import { NonVirtualRunEventPostFormComponent } from './event-form/non-virtual-run-event-post-form.component';
+import { NonVirtualRunEventPutFormComponent } from './event-form/non-virtual-run-event-put-form.component';
+import { VirtualRunEventPostFormComponent } from './event-form/virtual-run-event-post-form.component';
+import { VirtualRunEventPutFormComponent } from './event-form/virtual-run-event-put-form.component';
 
 @NgModule({
   imports: [
@@ -29,7 +33,11 @@ import { PaginationModule } from '../../shared/pagination/pagination.module';
     MatMenuModule
   ],
   declarations: [
-    EventComponent
+    EventComponent,
+    NonVirtualRunEventPostFormComponent,
+    NonVirtualRunEventPutFormComponent,
+    VirtualRunEventPostFormComponent,
+    VirtualRunEventPutFormComponent
   ]
 })
 export class EventModule { }

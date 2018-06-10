@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, Inject, Injector } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Event } from '../../entities/Resource';
+import { Event, NonVirtualRunEvent, VirtualRunEvent } from '../../entities/Resource';
 
 import {
   fadeInAnimation,
@@ -15,8 +15,9 @@ import {
   TableSetting
 } from '../../../../../stooges/src/public_api';
 
+import * as entities from '../../entities/Resource';
 
-type ResourceType = Event;
+type ResourceType = Event | VirtualRunEvent | NonVirtualRunEvent;
 
 @Component({
   templateUrl: './event.component.html',
@@ -35,22 +36,28 @@ export class EventComponent extends MatAbstractCPTableComponent<ResourceType> im
     tableService: TableService,
     @Inject(MAT_CP_TABLE_CONFIG) tableConfig: CPTableConfig,
     injector: Injector,
-    confirmService: MatConfirmDialogService,
+    confirmService: MatConfirmDialogService
   ) {
     super(activatedRoute, router, cdr, youtubeLoading, stoogesAppComponent, tableConfig, tableService, injector, confirmService);
   }
 
-
   async ngOnInit() {
-
+ 
     this.mainEntity = Event;
-    this.displayedColumns = ['Id', 'image', 'title', 'registerDeadline', 'startRunDate', 'endRunDate', 'registerAmount', 'participant'];
+    this.hasExtendsConcept = true;
+    this.projectEntities = Object.keys(entities).map(key => entities[key]);
+
+    this.displayedColumns = [
+      'entityType', 'image', 'title', 'registerDeadline', 'startRunDate', 'endRunDate', 'registerAmount', 'participant',
+      'NonVirtualRunEvent.location',
+      'VirtualRunEvent.group'
+    ];
     this.setting = new TableSetting({
       rowPerPage: 10,
       sort: 'sort',
       desc: true,
       search: {
-        string: ['title'],
+        string: ['title', 'VirtualRunEvent.group', 'NonVirtualRunEvent.location'],
         number: ['registerAmount', 'participant'],
         date: ['registerDeadline', 'startRunDate', 'endRunDate']
       }
@@ -61,6 +68,7 @@ export class EventComponent extends MatAbstractCPTableComponent<ResourceType> im
 
 
 }
+
 
 
 

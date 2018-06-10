@@ -32,15 +32,7 @@ import { CkImageBrowseComponent } from './ck-image-browse/ck-image-browse.compon
                 {
                     path: 'events',
                     loadChildren: './+event/event.module#EventModule',
-                },
-                {
-                    path: 'virtual-run-events',
-                    loadChildren: './+virtual-run-event/virtual-run-event.module#VirtualRunEventModule',
-                },
-                {
-                    path: 'non-virtual-run-events',
-                    loadChildren: './+non-virtual-run-event/non-virtual-run-event.module#NonVirtualRunEventModule',
-                },  
+                }, 
                 {
                     path: 'ck-image-browse',
                     component: CkImageBrowseComponent

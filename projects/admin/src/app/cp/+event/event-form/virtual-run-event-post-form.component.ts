@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 
 import { VirtualRunEvent, VirtualRunEventService } from '../../../entities/Resource';
-import { AbstractSimplePostFormComponent } from '../../simple-form/abstract-simple-post-form.component';
 
 import { fadeInAnimation, FormService } from '../../../../../../stooges/src/public_api';
+import { AbstractSimplePostFormComponent } from '../../simple-form/abstract-simple-post-form.component';
 
 @Component({
   templateUrl: '../../simple-form/simple-form.component.html',

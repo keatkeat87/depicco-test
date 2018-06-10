@@ -51,7 +51,9 @@ export abstract class AbstractTableComponent<ResourceType extends Entity> implem
 
   protected getResourcesStream(queryParams: QueryParams): ResourceStream<ResourceType[]> {
     let service = (this.hasExtendsConcept) ? this.niceParentEntityItem.service : this.mainResourceService;
-    return service.queryWatch(queryParams);
+    // hasExtendsConcept watch 全部 children 改变
+    let watchEntities = (this.hasExtendsConcept) ? [this.mainEntity.entityName,...this.withoutAbstractEntityItems.map(e => e.Class.entityName)] : undefined; 
+    return service.queryWatch(queryParams, watchEntities);
   }
 
   get sortDirection(): SortDirection {

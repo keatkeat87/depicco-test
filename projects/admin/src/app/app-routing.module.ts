@@ -5,8 +5,7 @@ import { AuthGuard, RouteData } from '../../../stooges/src/public_api';
 
 @NgModule({
     imports: [RouterModule.forRoot([
-        // { path: '', pathMatch: 'full', redirectTo: 'events' },
-        { path: '', pathMatch: 'full', redirectTo: 'debug' },
+        { path: '', pathMatch: 'full', redirectTo: 'events' },
         {
             path: 'debug',
             loadChildren : './+debug/debug.module#DebugModule'

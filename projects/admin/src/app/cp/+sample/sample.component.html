@@ -12,28 +12,42 @@
             <div class="clearfix topTable">
                 <form class="clearfix">
                     <s-mat-input [control]="search"
-                        displayName="Search" class="control"
-                        ></s-mat-input>
+                        displayName="Search"
+                        class="control"></s-mat-input>
 
-                    <!--
-                        <s-mat-input [control]="search"
-                            displayName="Search" class="control"
-                            ></s-mat-input>
-                        <ng-container [formGroup]="form"
-                            [eGroup]="eGroup">        
-                            
-                            <select-branch controlName="branchId"
-                                displayName="Branch" 
-                                class="control"
-                                ></select-branch>
-                        </ng-container> 
+                    <!-- <select-branch controlName="branchId"
+                        displayName="Branch"
+                        class="control"></select-branch>
+                    </ng-container>
 
-                        <s-mat-simple-select [control]="language"
-                            [items]="supportedLanguage"
-                            [hidePleaseSelect]="true"
-                            displayName="" class="control" >
-                        </s-mat-simple-select>
-                    -->
+                    <s-mat-simple-select [control]="language"
+                        [items]="supportedLanguage"
+                        [hidePleaseSelect]="true"
+                        displayName=""
+                        class="control">
+                    </s-mat-simple-select>
+
+                    <s-mat-simple-select [control]="selectedEntityItems"
+                        [items]="withoutAbstractEntityItems"
+                        [hidePleaseSelect]="true"
+                        [getValue]="entityItemSelectGetValue"
+                        [getDisplay]="entityItemSelectGetDisplay"
+                        [compareWith]="entityItemSelectCompareWith"
+                        [multiple]="true"
+                        displayName="Types"
+                        class="control">
+                    </s-mat-simple-select>
+
+                    <button mat-raised-button
+                        [matMenuTriggerFor]="create"
+                        class="createButton"
+                        color="primary">Create</button>
+                    <mat-menu #create="matMenu">
+                        <a *ngFor="let entityItem of withoutAbstractEntityItems"
+                            mat-menu-item
+                            [routerLink]="['create-' + entityItem.Class.className]"
+                            queryParamsHandling="preserve">{{ entityItem.displayName }}</a>
+                    </mat-menu> -->
 
                     <a routerLink="create"
                         queryParamsHandling="preserve"
@@ -50,15 +64,15 @@
                     [sortDirection]="sortDirection"
                     (sortChange)="sortBy($event)"
                     (remove)="remove($event.resource.Id)"
-                    [showDrag]="true"                   
+                    [generateEditRouterLink]="generateEditRouterLink"
+                    [showDrag]="true"
                     [cellDraggable]="sort == 'sort' && !updatingSort"
                     (cellDragstart)="recordDragStart($event.resource)"
                     (cellDragend)="draggingData && !updatingSort && updateSort()"
                     [rowSDragover]="draggingData && !updatingSort"
                     (rowDragenter)="draggingData && !updatingSort && moveSort($event.resource,$event.index)"
                     [draggingData]="draggingData"
-                    [generateRowNgClassFn]="generateRowNgClassFn"
-                    >
+                    [generateRowNgClassFn]="generateRowNgClassFn">
                 </s-mat-table>
             </div>
             <div class="tableFooterArea mt2">
